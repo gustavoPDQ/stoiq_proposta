@@ -32,14 +32,14 @@ const Presentation = () => {
           photo: '/Gemini_Generated_Image_lc2iexlc2iexlc2i.png'
         },
         {
-          initials: 'B',
+          photo: '/Foto_Breno.PNG',
           name: 'Breno',
           role: 'Especialista em Varejo',
           bio: 'Dono de rede de 8 lojas e e-commerce em Minas Gerais.',
           color: 'bg-indigo-700'
         },
         {
-          initials: 'JA',
+          photo: '/foto_jonas.jpg',
           name: 'Jonas Ayres',
           role: 'Negócios',
           bio: 'Mais de 10 anos de experiência em consultoria de gestão e finanças para pequenos e médios negócios brasileiros.',
@@ -279,21 +279,21 @@ const Presentation = () => {
 
       case 'team':
         return (
-          <div className="flex flex-col h-full pt-7 pb-8 px-8 md:px-16 animate-fadeIn w-full">
-            <div className="mb-10">
-              <h2 className="text-4xl font-bold text-slate-900 mb-1">{slide.title}</h2>
-              <p className="text-xl text-slate-500">{slide.subtitle}</p>
+          <div className="flex flex-col h-full pt-8 pb-14 px-8 md:px-16 animate-fadeIn w-full">
+            <div className="mb-4">
+              <h2 className="text-3xl font-bold text-slate-900 mb-1">{slide.title}</h2>
+              <p className="text-base text-slate-500">{slide.subtitle}</p>
             </div>
-            <div className="grid grid-cols-3 gap-6 max-h-[34rem]">
+            <div className="grid grid-cols-3 gap-6 flex-1 min-h-0">
               {slide.members.map((m, idx) => (
-                <div key={idx} className="flex flex-col bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-md transition-all">
-                  <div className={`w-full ${m.color} flex items-center justify-center overflow-hidden`} style={{ aspectRatio: '3/4' }}>
+                <div key={idx} className="flex flex-col bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-md transition-all min-h-0">
+                  <div className={`flex-1 w-full ${m.color} flex items-center justify-center overflow-hidden min-h-0`}>
                     {m.photo
                       ? <img src={m.photo} alt={m.name} className="w-full h-full object-cover object-top" />
                       : <span className="text-white font-bold text-4xl opacity-40">{m.initials}</span>
                     }
                   </div>
-                  <div className="px-4 pt-3 pb-3 text-center flex flex-col gap-2.5">
+                  <div className="px-4 pt-3 pb-3 text-center flex flex-col gap-2.5 flex-shrink-0">
                     <h3 className="text-base font-bold text-slate-800 leading-tight">{m.name}</h3>
                     <span className="text-xs font-semibold text-blue-600">{m.role}</span>
                     <p className="text-xs text-slate-500 leading-snug">{m.bio}</p>
@@ -306,20 +306,20 @@ const Presentation = () => {
 
       case 'client_interview':
         return (
-          <div className="flex flex-col h-full pt-10 pb-20 px-8 md:px-16 animate-fadeIn w-full">
-            <div className="mb-6">
-              <h2 className="text-4xl font-bold text-slate-900 mb-1">{slide.title}</h2>
-              <p className="text-xl text-slate-500">{slide.subtitle}</p>
+          <div className="flex flex-col h-full pt-8 pb-14 px-8 md:px-16 animate-fadeIn w-full">
+            <div className="mb-4">
+              <h2 className="text-3xl font-bold text-slate-900 mb-1">{slide.title}</h2>
+              <p className="text-base text-slate-500">{slide.subtitle}</p>
             </div>
-            <div className="grid grid-cols-2 gap-8 flex-1 content-center">
+            <div className="grid grid-cols-2 gap-4 flex-1 content-center">
               {slide.sections.map((s, idx) => (
-                <div key={idx} className="flex gap-4 items-center bg-slate-50 rounded-xl px-5 py-4 border border-slate-200 hover:border-blue-300 hover:bg-blue-50/40 transition-colors">
-                  <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center text-blue-700 flex-shrink-0">
-                    <s.icon size={26} />
+                <div key={idx} className="flex gap-3 items-center bg-slate-50 rounded-xl px-4 py-3 border border-slate-200 hover:border-blue-300 hover:bg-blue-50/40 transition-colors">
+                  <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center text-blue-700 flex-shrink-0">
+                    <s.icon size={22} />
                   </div>
                   <div>
-                    <p className="text-lg font-bold text-slate-800 leading-tight">{s.label}</p>
-                    <p className="text-sm text-slate-500 italic leading-snug mt-0.5">{s.question}</p>
+                    <p className="text-sm font-bold text-slate-800 leading-tight">{s.label}</p>
+                    <p className="text-xs text-slate-500 italic leading-snug mt-0.5">{s.question}</p>
                   </div>
                 </div>
               ))}
@@ -329,24 +329,24 @@ const Presentation = () => {
 
       case 'deliverables_new':
         return (
-          <div className="flex flex-col h-full pt-10 pb-20 px-8 md:px-16 animate-fadeIn w-full">
-            <div className="mb-8">
-              <h2 className="text-4xl font-bold text-slate-900 mb-1">{slide.title}</h2>
-              <p className="text-xl text-slate-500">{slide.subtitle}</p>
+          <div className="flex flex-col h-full pt-8 pb-14 px-8 md:px-16 animate-fadeIn w-full">
+            <div className="mb-4">
+              <h2 className="text-3xl font-bold text-slate-900 mb-1">{slide.title}</h2>
+              <p className="text-base text-slate-500">{slide.subtitle}</p>
             </div>
             <div className="flex-1 flex flex-col justify-center">
-            <div className="grid grid-cols-2 gap-x-10 gap-y-4 w-full" style={{ gridAutoRows: '1fr' }}>
+            <div className="grid grid-cols-2 gap-x-6 gap-y-3 w-full" style={{ gridAutoRows: '1fr' }}>
               {slide.items.map((item, idx) => (
-                <div key={idx} className={`bg-white rounded-2xl p-5 border-l-4 ${item.color} shadow-sm hover:shadow-md transition-all flex gap-3${idx === slide.items.length - 1 && slide.items.length % 2 !== 0 ? ' col-start-1 col-end-3 max-w-[calc(50%-1.25rem)] mx-auto w-full' : ''}`}>
+                <div key={idx} className={`bg-white rounded-2xl p-3 border-l-4 ${item.color} shadow-sm hover:shadow-md transition-all flex gap-2${idx === slide.items.length - 1 && slide.items.length % 2 !== 0 ? ' col-start-1 col-end-3 max-w-[calc(50%-0.75rem)] mx-auto w-full' : ''}`}>
                   <div className="flex-shrink-0">
-                    <span className={`text-4xl font-black ${item.color.split(' ')[1]} opacity-20 leading-none`}>{item.number}</span>
+                    <span className={`text-2xl font-black ${item.color.split(' ')[1]} opacity-20 leading-none`}>{item.number}</span>
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-2">
-                      <item.icon size={22} className={item.color.split(' ')[1]} />
-                      <h3 className="text-xl font-bold text-slate-800">{item.title}</h3>
+                    <div className="flex items-center gap-2 mb-1">
+                      <item.icon size={16} className={item.color.split(' ')[1]} />
+                      <h3 className="text-sm font-bold text-slate-800">{item.title}</h3>
                     </div>
-                    <p className="text-sm text-slate-600 leading-relaxed">{item.desc}</p>
+                    <p className="text-xs text-slate-600 leading-snug">{item.desc}</p>
                   </div>
                 </div>
               ))}
@@ -357,10 +357,10 @@ const Presentation = () => {
 
       case 'timeline_new':
         return (
-          <div className="flex flex-col h-full pt-10 pb-20 px-8 md:px-16 animate-fadeIn w-full">
-            <div className="mb-6">
-              <h2 className="text-4xl font-bold text-slate-900 mb-1">{slide.title}</h2>
-              <p className="text-xl text-slate-500">{slide.subtitle}</p>
+          <div className="flex flex-col h-full pt-8 pb-14 px-8 md:px-16 animate-fadeIn w-full">
+            <div className="mb-4">
+              <h2 className="text-3xl font-bold text-slate-900 mb-1">{slide.title}</h2>
+              <p className="text-base text-slate-500">{slide.subtitle}</p>
             </div>
             <div className="flex-1 flex items-center">
             <div className="grid grid-cols-3 gap-5 w-full">
@@ -395,26 +395,26 @@ const Presentation = () => {
               <BarChart2 className="w-12 h-12 text-white" />
             </div>
             <div className="max-w-4xl">{slide.title}</div>
-            <p className="text-xl md:text-2xl text-blue-600 font-medium max-w-2xl mt-8">{slide.subtitle}</p>
-            {slide.footer && (
-              <div className="mt-12 pt-8 border-t border-slate-200 w-full max-w-md">
-                <p className="text-slate-500 font-medium">{slide.footer}</p>
-              </div>
-            )}
+            {slide.subtitle && <p className="text-xl md:text-2xl text-blue-600 font-medium max-w-2xl mt-8">{slide.subtitle}</p>}
             {slide.cta && (
-              <button className="mt-8 px-8 py-4 bg-blue-700 text-white rounded-lg font-bold text-lg shadow-lg hover:bg-blue-800 transition-all flex items-center gap-2">
+              <button className="px-8 py-4 bg-blue-700 text-white rounded-lg font-bold text-lg shadow-lg hover:bg-blue-800 transition-all flex items-center gap-2">
                 Vamos começar? <ArrowRight size={20} />
               </button>
+            )}
+            {slide.footer && (
+              <div className="pt-8 border-t border-slate-200 w-full max-w-md">
+                <p className="text-slate-500 font-medium">{slide.footer}</p>
+              </div>
             )}
           </div>
         );
 
       case 'pricing_split':
         return (
-          <div className="flex flex-col h-full pt-10 pb-8 px-4 md:px-16 animate-fadeIn">
-            <div className="mb-6">
-              <h2 className="text-4xl font-bold text-slate-900 mb-1">{slide.title}</h2>
-              <p className="text-xl text-slate-500">{slide.subtitle}</p>
+          <div className="flex flex-col h-full pt-8 pb-14 px-8 md:px-16 animate-fadeIn w-full">
+            <div className="mb-4">
+              <h2 className="text-3xl font-bold text-slate-900 mb-1">{slide.title}</h2>
+              <p className="text-base text-slate-500">{slide.subtitle}</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch flex-1 min-h-0 max-w-5xl mx-auto w-full">
               {slide.cards.map((card, idx) => (
@@ -455,20 +455,20 @@ const Presentation = () => {
 
       case 'list_visual':
         return (
-          <div className="flex flex-col h-full pt-10 pb-8 px-8 md:px-16 animate-fadeIn">
-            <div className="mb-6">
-              <h2 className="text-4xl font-bold text-slate-900 mb-1">{slide.title}</h2>
-              <p className="text-xl text-slate-500">{slide.subtitle}</p>
+          <div className="flex flex-col h-full pt-8 pb-14 px-8 md:px-16 animate-fadeIn w-full">
+            <div className="mb-4">
+              <h2 className="text-3xl font-bold text-slate-900 mb-1">{slide.title}</h2>
+              <p className="text-base text-slate-500">{slide.subtitle}</p>
             </div>
-            <div className="flex flex-col justify-center flex-1 gap-4">
+            <div className="flex flex-col justify-center flex-1 gap-3">
               {slide.items.map((item, idx) => (
-                <div key={idx} className="flex items-center gap-6 p-6 bg-slate-50 rounded-xl border-l-4 border-blue-600 shadow-sm">
-                  <div className="bg-white p-4 rounded-full shadow-sm text-blue-700 flex-shrink-0">
-                    <item.icon size={32} />
+                <div key={idx} className="flex items-center gap-4 p-4 bg-slate-50 rounded-xl border-l-4 border-blue-600 shadow-sm">
+                  <div className="bg-white p-3 rounded-full shadow-sm text-blue-700 flex-shrink-0">
+                    <item.icon size={22} />
                   </div>
                   <div>
-                    <h3 className="text-2xl font-bold text-slate-800">{item.title}</h3>
-                    <p className="text-lg text-slate-600">{item.desc}</p>
+                    <h3 className="text-sm font-bold text-slate-800">{item.title}</h3>
+                    <p className="text-xs text-slate-600">{item.desc}</p>
                   </div>
                 </div>
               ))}
@@ -478,21 +478,21 @@ const Presentation = () => {
 
       case 'list_visual_red':
         return (
-          <div className="flex flex-col h-full pt-10 pb-8 px-8 md:px-16 animate-fadeIn">
-            <div className="mb-6">
-              <h2 className="text-4xl font-bold text-slate-900 mb-1">{slide.title}</h2>
-              <p className="text-xl text-slate-500">{slide.subtitle}</p>
+          <div className="flex flex-col h-full pt-8 pb-14 px-8 md:px-16 animate-fadeIn w-full">
+            <div className="mb-4">
+              <h2 className="text-3xl font-bold text-slate-900 mb-1">{slide.title}</h2>
+              <p className="text-base text-slate-500">{slide.subtitle}</p>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 flex-1 content-center">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 flex-1 content-center">
               {slide.items.map((item, idx) => (
-                <div key={idx} className="flex flex-col gap-4 p-6 bg-red-50/50 rounded-xl border border-red-100 shadow-sm hover:border-red-200 transition-colors">
-                  <div className="flex items-center gap-3">
-                    <div className="p-2 bg-white rounded-lg shadow-sm text-red-600">
-                      <XCircle size={24} />
+                <div key={idx} className="flex flex-col gap-2 p-4 bg-red-50/50 rounded-xl border border-red-100 shadow-sm hover:border-red-200 transition-colors">
+                  <div className="flex items-center gap-2">
+                    <div className="p-1.5 bg-white rounded-lg shadow-sm text-red-600">
+                      <XCircle size={18} />
                     </div>
-                    <h3 className="text-xl font-bold text-slate-800">{item.title}</h3>
+                    <h3 className="text-sm font-bold text-slate-800">{item.title}</h3>
                   </div>
-                  <p className="text-base text-slate-600">{item.desc}</p>
+                  <p className="text-xs text-slate-600">{item.desc}</p>
                 </div>
               ))}
             </div>
@@ -501,29 +501,31 @@ const Presentation = () => {
 
       case 'grid_small':
         return (
-          <div className="flex flex-col h-full pt-10 pb-20 px-8 md:px-16 animate-fadeIn">
-            <div className="mb-24">
-              <h2 className="text-4xl font-bold text-slate-900 mb-1">{slide.title}</h2>
-              <p className="text-xl text-slate-500">{slide.subtitle}</p>
+          <div className="flex flex-col h-full pt-8 pb-14 px-8 md:px-16 animate-fadeIn w-full">
+            <div className="mb-4">
+              <h2 className="text-3xl font-bold text-slate-900 mb-1">{slide.title}</h2>
+              <p className="text-base text-slate-500">{slide.subtitle}</p>
             </div>
-            <div className="grid grid-cols-3 gap-4" style={{ gridAutoRows: '1fr' }}>
-              {slide.cards.map((card, idx) => (
-                <div key={idx} className="bg-white p-5 rounded-xl shadow-sm border border-slate-200 hover:border-blue-400 hover:shadow-md transition-all flex flex-col">
-                  <div className="flex items-center gap-3 mb-2">
-                    <div className={`p-2 rounded-lg bg-slate-50 ${card.color} flex-shrink-0`}>
-                      <card.icon size={20} />
+            <div className="flex-1 flex flex-col justify-center gap-6">
+              <div className="grid grid-cols-3 gap-4" style={{ gridAutoRows: '1fr' }}>
+                {slide.cards.map((card, idx) => (
+                  <div key={idx} className="bg-white p-3 rounded-xl shadow-sm border border-slate-200 hover:border-blue-400 hover:shadow-md transition-all flex flex-col">
+                    <div className="flex items-center gap-2 mb-1.5">
+                      <div className={`p-1.5 rounded-lg bg-slate-50 ${card.color} flex-shrink-0`}>
+                        <card.icon size={16} />
+                      </div>
+                      <h3 className="text-sm font-bold text-slate-800 leading-tight">{card.title}</h3>
                     </div>
-                    <h3 className="text-lg font-bold text-slate-800 leading-tight">{card.title}</h3>
+                    <p className="text-xs text-slate-600 leading-snug italic">{card.text}</p>
                   </div>
-                  <p className="text-sm text-slate-600 leading-relaxed italic">{card.text}</p>
-                </div>
-              ))}
-            </div>
-            {slide.highlight && (
-              <div className="mt-16 bg-blue-50 border-l-4 border-blue-600 p-4 rounded-r-lg w-full">
-                <p className="text-lg font-semibold text-blue-900">{slide.highlight}</p>
+                ))}
               </div>
-            )}
+              {slide.highlight && (
+                <div className="bg-blue-50 border-l-4 border-blue-600 p-4 rounded-r-lg w-full">
+                  <p className="text-base font-semibold text-blue-900">{slide.highlight}</p>
+                </div>
+              )}
+            </div>
           </div>
         );
 
