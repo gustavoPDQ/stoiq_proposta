@@ -240,6 +240,66 @@ const Presentation = () => {
       ],
     },
     {
+      id: 'sugestao_compra',
+      type: 'sugestao_compra',
+      title: 'Sugestão de Compra',
+      subtitle: 'Relatório por fornecedor com SKU, quantidade e investimento — pronto para executar',
+      params: [
+        { label: 'Cobertura ideal', value: '2× lead time', desc: 'Estoque suficiente para vender durante o lead time e ainda ter reserva para variações de demanda' },
+        { label: 'Próxima compra', value: '05/04/2025', desc: 'Data-limite para emissão do pedido garantindo reposição antes do estoque zerar' },
+        { label: 'Orçamento disponível', value: 'R$ 45.000', desc: 'Teto de investimento definido com o cliente para o ciclo de compra' },
+      ],
+      category: {
+        name: 'Feminino — Fornecedor: Studio Moda',
+        curve: 'A',
+        items: [
+          { sku: 'CAL-FEM-001', name: 'Calça Slim Feminina P',   estoque: 4,  vendaDia: 2.1, leadtime: 15, coberturaAtual: 2,  sugestao: 55,  custo: 89.90  },
+          { sku: 'CAL-FEM-002', name: 'Calça Slim Feminina M',   estoque: 0,  vendaDia: 3.4, leadtime: 15, coberturaAtual: 0,  sugestao: 102, custo: 89.90  },
+          { sku: 'CAL-FEM-003', name: 'Calça Slim Feminina G',   estoque: 11, vendaDia: 1.8, leadtime: 15, coberturaAtual: 6,  sugestao: 43,  custo: 89.90  },
+          { sku: 'VES-FEM-022', name: 'Vestido Midi Floral P',   estoque: 2,  vendaDia: 1.5, leadtime: 20, coberturaAtual: 1,  sugestao: 58,  custo: 129.90 },
+          { sku: 'VES-FEM-023', name: 'Vestido Midi Floral M',   estoque: 0,  vendaDia: 2.2, leadtime: 20, coberturaAtual: 0,  sugestao: 88,  custo: 129.90 },
+          { sku: 'BLU-FEM-008', name: 'Blusa Linho Off-White M', estoque: 18, vendaDia: 0.9, leadtime: 20, coberturaAtual: 20, sugestao: 18,  custo: 69.90  },
+          { sku: 'BLU-FEM-009', name: 'Blusa Linho Off-White G', estoque: 3,  vendaDia: 1.1, leadtime: 20, coberturaAtual: 3,  sugestao: 41,  custo: 69.90  },
+        ],
+      },
+    },
+    {
+      id: 'acompanhamento_meta',
+      type: 'acompanhamento_meta',
+      title: 'Acompanhamento de Meta',
+      subtitle: 'Você vai bater a meta? Cruzamos vendas realizadas, estoque disponível e pedidos a entregar',
+      periodo: { mes: 'Março 2025', diaAtual: 13, totalDias: 31 },
+      totais: {
+        meta:      { label: 'Meta do mês',          value: 85000 },
+        vendido:   { label: 'Vendido até 13/03',     value: 38420 },
+        estoque:   { label: 'Estoque disponível',    value: 52300 },
+        aEntregar: { label: 'Pedidos a entregar',    value: 18600 },
+      },
+      categorias: [
+        {
+          nome: 'Feminino',
+          meta: 42000,
+          vendido: 19800,
+          estoque: 27400,
+          aEntregar: 9200,
+        },
+        {
+          nome: 'Masculino',
+          meta: 28000,
+          vendido: 12600,
+          estoque: 17300,
+          aEntregar: 6800,
+        },
+        {
+          nome: 'Acessórios',
+          meta: 15000,
+          vendido: 6020,
+          estoque: 7600,
+          aEntregar: 2600,
+        },
+      ],
+    },
+    {
       id: 'timeline',
       type: 'timeline_new',
       title: 'Como funciona na prática',
@@ -691,6 +751,238 @@ const Presentation = () => {
             </div>
           </div>
         );
+
+      case 'acompanhamento_meta': {
+        const { periodo, totais, categorias } = slide;
+        const diasRestantes = periodo.totalDias - periodo.diaAtual;
+        const ritmoAtual = totais.vendido.value / periodo.diaAtual;
+        const projecao = Math.round(ritmoAtual * periodo.totalDias);
+        const disponivel = totais.estoque.value + totais.aEntregar.value;
+        const falta = totais.meta.value - totais.vendido.value;
+        const pctMes = Math.round((periodo.diaAtual / periodo.totalDias) * 100);
+        const pctVendido = Math.round((totais.vendido.value / totais.meta.value) * 100);
+        const brl = (v) => v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 });
+        const statusGeral = disponivel >= falta
+          ? { label: 'Vai bater', bg: 'bg-green-100', text: 'text-green-700', border: 'border-green-300' }
+          : disponivel >= falta * 0.85
+          ? { label: 'Em risco', bg: 'bg-amber-100', text: 'text-amber-700', border: 'border-amber-300' }
+          : { label: 'Não vai bater', bg: 'bg-red-100', text: 'text-red-700', border: 'border-red-300' };
+
+        return (
+          <div className="flex flex-col h-full pt-6 pb-12 px-8 md:px-14 animate-fadeIn w-full gap-3">
+            <div className="flex items-start justify-between">
+              <div>
+                <h2 className="text-3xl font-bold text-slate-900 mb-1">{slide.title}</h2>
+                <p className="text-base text-slate-500">{slide.subtitle}</p>
+              </div>
+              <div className={`flex items-center gap-2 px-4 py-2 rounded-xl border ${statusGeral.bg} ${statusGeral.border} flex-shrink-0`}>
+                <span className={`text-sm font-bold ${statusGeral.text}`}>{statusGeral.label}</span>
+              </div>
+            </div>
+
+            {/* KPI cards */}
+            <div className="grid grid-cols-5 gap-3 flex-shrink-0">
+              {/* Meta */}
+              <div className="bg-blue-50 border border-blue-200 rounded-xl px-3 py-2.5 col-span-1">
+                <p className="text-[10px] font-bold text-blue-500 uppercase tracking-wide">{totais.meta.label}</p>
+                <p className="text-xl font-extrabold text-blue-800">{brl(totais.meta.value)}</p>
+                <p className="text-[10px] text-blue-400">{periodo.mes}</p>
+              </div>
+              {/* Vendido + barra */}
+              <div className="bg-white border border-slate-200 rounded-xl px-3 py-2.5 col-span-2">
+                <div className="flex justify-between items-start mb-1">
+                  <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wide">{totais.vendido.label}</p>
+                  <span className="text-[10px] font-bold text-slate-400">{pctVendido}% da meta · dia {periodo.diaAtual}/{periodo.totalDias} ({pctMes}% do mês)</span>
+                </div>
+                <p className="text-xl font-extrabold text-slate-800 mb-1.5">{brl(totais.vendido.value)}</p>
+                <div className="relative h-2 bg-slate-100 rounded-full overflow-hidden">
+                  {/* Marker: onde deveria estar no ritmo ideal */}
+                  <div className="absolute top-0 h-full bg-slate-300 rounded-full" style={{ width: `${pctMes}%` }} />
+                  {/* Vendido real */}
+                  <div className="absolute top-0 h-full bg-blue-500 rounded-full" style={{ width: `${Math.min(pctVendido, 100)}%` }} />
+                </div>
+                <div className="flex justify-between mt-1">
+                  <span className="text-[10px] text-slate-400">Ritmo ideal: {brl(Math.round(ritmoAtual * periodo.totalDias * (pctMes/pctVendido)))}</span>
+                  <span className="text-[10px] text-blue-600 font-semibold">Projeção: {brl(projecao)}</span>
+                </div>
+              </div>
+              {/* Estoque disponível */}
+              <div className="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5">
+                <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wide">{totais.estoque.label}</p>
+                <p className="text-xl font-extrabold text-slate-800">{brl(totais.estoque.value)}</p>
+                <p className="text-[10px] text-slate-400">valor de venda</p>
+              </div>
+              {/* A entregar */}
+              <div className="bg-purple-50 border border-purple-200 rounded-xl px-3 py-2.5">
+                <p className="text-[10px] font-bold text-purple-500 uppercase tracking-wide">{totais.aEntregar.label}</p>
+                <p className="text-xl font-extrabold text-purple-800">{brl(totais.aEntregar.value)}</p>
+                <p className="text-[10px] text-purple-400">em trânsito</p>
+              </div>
+            </div>
+
+            {/* Category table */}
+            <div className="flex-1 flex flex-col min-h-0">
+              <div className="rounded-xl overflow-hidden border border-slate-200 shadow-sm">
+                <table className="text-xs w-full border-collapse">
+                  <thead>
+                    <tr className="bg-blue-700 text-white font-semibold">
+                      <th className="px-4 py-2 text-left">Categoria</th>
+                      <th className="px-4 py-2 text-right border-l border-blue-600">Meta</th>
+                      <th className="px-4 py-2 text-right border-l border-blue-600">Vendido</th>
+                      <th className="px-4 py-2 text-right border-l border-blue-600">% meta</th>
+                      <th className="px-4 py-2 text-right border-l border-blue-600">Falta</th>
+                      <th className="px-4 py-2 text-right border-l border-blue-600">Estoque disp.</th>
+                      <th className="px-4 py-2 text-right border-l border-blue-600">A entregar</th>
+                      <th className="px-4 py-2 text-right border-l border-blue-500 bg-blue-800">Total disp.</th>
+                      <th className="px-4 py-2 text-center border-l border-blue-500 bg-blue-800">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {categorias.map((cat, idx) => {
+                      const faltaCat = cat.meta - cat.vendido;
+                      const dispCat = cat.estoque + cat.aEntregar;
+                      const pctCat = Math.round((cat.vendido / cat.meta) * 100);
+                      const st = dispCat >= faltaCat
+                        ? { label: 'OK', bg: 'bg-green-100', text: 'text-green-700' }
+                        : dispCat >= faltaCat * 0.85
+                        ? { label: 'Risco', bg: 'bg-amber-100', text: 'text-amber-700' }
+                        : { label: 'Gap', bg: 'bg-red-100', text: 'text-red-700' };
+                      return (
+                        <tr key={idx} className={idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/50'}>
+                          <td className="px-4 py-2 font-bold text-slate-800">{cat.nome}</td>
+                          <td className="px-4 py-2 text-right text-slate-600 border-l border-slate-100">{brl(cat.meta)}</td>
+                          <td className="px-4 py-2 text-right font-semibold text-blue-700 border-l border-slate-100">{brl(cat.vendido)}</td>
+                          <td className="px-4 py-2 text-right border-l border-slate-100">
+                            <div className="flex items-center justify-end gap-1.5">
+                              <div className="w-16 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                                <div className="h-full bg-blue-400 rounded-full" style={{ width: `${Math.min(pctCat, 100)}%` }} />
+                              </div>
+                              <span className="text-slate-600 font-medium">{pctCat}%</span>
+                            </div>
+                          </td>
+                          <td className="px-4 py-2 text-right font-semibold text-red-600 border-l border-slate-100">{brl(faltaCat)}</td>
+                          <td className="px-4 py-2 text-right text-slate-600 border-l border-slate-100">{brl(cat.estoque)}</td>
+                          <td className="px-4 py-2 text-right text-purple-700 font-medium border-l border-slate-100">{brl(cat.aEntregar)}</td>
+                          <td className="px-4 py-2 text-right font-bold text-slate-800 border-l border-slate-100 bg-slate-50">{brl(dispCat)}</td>
+                          <td className="px-4 py-2 text-center border-l border-slate-100 bg-slate-50">
+                            <span className={`inline-block px-2 py-0.5 rounded-full text-[10px] font-bold ${st.bg} ${st.text}`}>{st.label}</span>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                    <tr className="bg-blue-700 text-white font-bold border-t-2 border-blue-800">
+                      <td className="px-4 py-2">Total</td>
+                      <td className="px-4 py-2 text-right border-l border-blue-600">{brl(totais.meta.value)}</td>
+                      <td className="px-4 py-2 text-right border-l border-blue-600">{brl(totais.vendido.value)}</td>
+                      <td className="px-4 py-2 text-right border-l border-blue-600">{pctVendido}%</td>
+                      <td className="px-4 py-2 text-right border-l border-blue-600">{brl(falta)}</td>
+                      <td className="px-4 py-2 text-right border-l border-blue-600">{brl(totais.estoque.value)}</td>
+                      <td className="px-4 py-2 text-right border-l border-blue-600">{brl(totais.aEntregar.value)}</td>
+                      <td className="px-4 py-2 text-right border-l border-blue-500 bg-blue-800">{brl(disponivel)}</td>
+                      <td className="px-4 py-2 text-center border-l border-blue-500 bg-blue-800">
+                        <span className={`inline-block px-2 py-0.5 rounded-full text-[10px] font-bold ${statusGeral.bg} ${statusGeral.text}`}>{statusGeral.label}</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <p className="text-[10px] text-slate-400 mt-1.5 italic">* Estoque disponível = valor de venda dos SKUs em estoque. A entregar = pedidos de compra confirmados ainda não recebidos.</p>
+            </div>
+          </div>
+        );
+      }
+
+      case 'sugestao_compra': {
+        const coberturaIdeal = 2; // múltiplo do lead time
+        return (
+          <div className="flex flex-col h-full pt-6 pb-12 px-8 md:px-14 animate-fadeIn w-full gap-3">
+            <div>
+              <h2 className="text-3xl font-bold text-slate-900 mb-1">{slide.title}</h2>
+              <p className="text-base text-slate-500">{slide.subtitle}</p>
+            </div>
+
+            {/* Params */}
+            <div className="grid grid-cols-3 gap-3 flex-shrink-0">
+              {slide.params.map((p, idx) => {
+                const colors = [
+                  { bg: 'bg-blue-50', border: 'border-blue-200', label: 'text-blue-500', value: 'text-blue-800' },
+                  { bg: 'bg-green-50', border: 'border-green-200', label: 'text-green-600', value: 'text-green-800' },
+                  { bg: 'bg-slate-50', border: 'border-slate-200', label: 'text-slate-500', value: 'text-slate-800' },
+                ];
+                const c = colors[idx];
+                return (
+                  <div key={idx} className={`${c.bg} border ${c.border} rounded-xl px-4 py-3`}>
+                    <p className={`text-[10px] font-bold uppercase tracking-wide ${c.label} mb-0.5`}>{p.label}</p>
+                    <p className={`text-xl font-extrabold ${c.value} leading-tight`}>{p.value}</p>
+                    <p className="text-[11px] text-slate-400 leading-snug mt-1">{p.desc}</p>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Table */}
+            <div className="flex-1 flex flex-col min-h-0">
+              <div className="flex items-center gap-2 mb-1.5">
+                <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wide">{slide.category.name}</p>
+                <span className="text-[10px] font-bold bg-blue-100 text-blue-700 px-1.5 py-0.5 rounded">Curva {slide.category.curve}</span>
+              </div>
+              <div className="rounded-xl overflow-hidden border border-slate-200 shadow-sm flex-1">
+                <table className="text-xs w-full border-collapse">
+                  <thead>
+                    <tr className="bg-blue-700 text-white font-semibold">
+                      <th className="px-3 py-2 text-left">SKU</th>
+                      <th className="px-3 py-2 text-left border-l border-blue-600">Referência</th>
+                      <th className="px-3 py-2 text-right border-l border-blue-600">Estoque</th>
+                      <th className="px-3 py-2 text-right border-l border-blue-600">Venda/dia</th>
+                      <th className="px-3 py-2 text-right border-l border-blue-600">Lead time</th>
+                      <th className="px-3 py-2 text-right border-l border-blue-600">Cobertura atual</th>
+                      <th className="px-3 py-2 text-right border-l border-blue-500 bg-green-700">Sugestão</th>
+                      <th className="px-3 py-2 text-right border-l border-blue-500 bg-green-700">Investimento</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {slide.category.items.map((item, idx) => {
+                      const cobIdeal = coberturaIdeal * item.leadtime;
+                      const statusCob = item.coberturaAtual === 0
+                        ? { bg: 'bg-red-50', text: 'text-red-700', badge: 'bg-red-100 text-red-700' }
+                        : item.coberturaAtual < item.leadtime
+                        ? { bg: 'bg-orange-50', text: 'text-orange-700', badge: 'bg-orange-100 text-orange-700' }
+                        : { bg: '', text: 'text-slate-700', badge: '' };
+                      const investimento = (item.sugestao * item.custo).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+                      return (
+                        <tr key={idx} className={`${idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/50'} ${statusCob.bg} hover:bg-blue-50/30 transition-colors`}>
+                          <td className="px-3 py-1.5 font-mono text-slate-400 whitespace-nowrap">{item.sku}</td>
+                          <td className="px-3 py-1.5 font-semibold text-slate-700 border-l border-slate-100 whitespace-nowrap">{item.name}</td>
+                          <td className={`px-3 py-1.5 text-right font-bold border-l border-slate-100 ${item.estoque === 0 ? 'text-red-600' : 'text-slate-700'}`}>{item.estoque}</td>
+                          <td className="px-3 py-1.5 text-right text-slate-600 border-l border-slate-100">{item.vendaDia.toFixed(1)}</td>
+                          <td className="px-3 py-1.5 text-right text-slate-600 border-l border-slate-100">{item.leadtime}d</td>
+                          <td className="px-3 py-1.5 text-right border-l border-slate-100">
+                            <span className={`inline-block px-1.5 py-0.5 rounded font-bold ${item.coberturaAtual === 0 ? 'bg-red-100 text-red-700' : item.coberturaAtual < item.leadtime ? 'bg-orange-100 text-orange-700' : 'bg-slate-100 text-slate-600'}`}>
+                              {item.coberturaAtual}d
+                            </span>
+                            <span className="text-slate-300 ml-1 text-[10px]">/{cobIdeal}d</span>
+                          </td>
+                          <td className="px-3 py-1.5 text-right font-bold text-green-700 border-l border-slate-100 bg-green-50/40">{item.sugestao} un</td>
+                          <td className="px-3 py-1.5 text-right font-bold text-green-800 border-l border-slate-100 bg-green-50/40 whitespace-nowrap">{investimento}</td>
+                        </tr>
+                      );
+                    })}
+                    <tr className="bg-green-700 text-white font-bold border-t-2 border-green-800">
+                      <td colSpan={6} className="px-3 py-2 text-right">Total do pedido</td>
+                      <td className="px-3 py-2 text-right border-l border-green-600">
+                        {slide.category.items.reduce((s, i) => s + i.sugestao, 0)} un
+                      </td>
+                      <td className="px-3 py-2 text-right border-l border-green-600 whitespace-nowrap">
+                        {slide.category.items.reduce((s, i) => s + i.sugestao * i.custo, 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        );
+      }
 
       case 'data_health':
         return (
