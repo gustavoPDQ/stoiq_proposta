@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StoIQ - Proposta Comercial</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#0f172a;background:#f1f5f9}
+.outer{width:100vw;height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+.frame{background:#fff;border-radius:12px;box-shadow:0 25px 50px -12px rgba(0,0,0,.25);overflow:hidden;display:flex;flex-direction:column;position:relative;height:calc(100vh - 3rem);aspect-ratio:16/9;max-width:100%;max-height:100%}
+.frame-inner{width:100%;height:100%;display:flex;position:relative}
+/* Sidebar */
+.sidebar{width:96px;background:#1e3a8a;display:flex;flex-direction:column;align-items:center;padding:32px 0;justify-content:space-between;flex-shrink:0}
+.sidebar-logo{width:48px;height:48px;background:#1d4ed8;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:20px;box-shadow:inset 0 2px 4px rgba(0,0,0,.2)}
+.sidebar-text{color:rgba(147,197,253,.4);font-family:monospace;font-size:12px;writing-mode:vertical-rl;transform:rotate(180deg);padding:48px 0;letter-spacing:1px}
+.sidebar-dot{width:8px;height:8px;border-radius:50%;background:#4ade80}
+/* Main */
+.main{flex:1;position:relative;overflow:hidden;background:linear-gradient(to bottom right,#fff,#f8fafc)}
+.slide-counter{position:absolute;top:24px;right:32px;font-size:14px;font-weight:600;color:#94a3b8;z-index:10}
+.slide-area{height:100%;width:100%;padding:32px 48px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.slide-content{width:100%;height:100%;display:flex;align-items:center;justify-content:center}
+/* Nav */
+.nav{position:absolute;bottom:32px;right:32px;display:flex;gap:16px;z-index:10}
+.nav button{width:48px;height:48px;border-radius:50%;border:1px solid #e2e8f0;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.nav .prev{background:#fff;box-shadow:0 4px 6px -1px rgba(0,0,0,.1);color:#475569}
+.nav .prev:hover{color:#2563eb}
+.nav .next{background:#2563eb;box-shadow:0 4px 6px -1px rgba(59,130,246,.4);color:#fff;border-color:#2563eb}
+.nav .next:hover{background:#1d4ed8}
+.nav button:disabled{opacity:.3;cursor:not-allowed}
+.nav button svg{width:24px;height:24px}
+/* Animations */
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.animate-fadeIn{animation:fadeIn .4s ease-out}
+/* Slide containers */
+.slide-std{display:flex;flex-direction:column;height:100%;width:100%;padding:32px 64px 56px;animation:fadeIn .4s ease-out}
+.slide-std-compact{display:flex;flex-direction:column;height:100%;width:100%;padding:24px 56px 48px;animation:fadeIn .4s ease-out}
+.slide-header h2{font-size:clamp(22px,3.5vh,36px);font-weight:700;color:#0f172a;margin-bottom:4px}
+.slide-header p{font-size:clamp(14px,2vh,20px);color:#64748b}
+/* Utility */
+.grid{display:grid}.flex{display:flex}.flex-col{flex-direction:column}.flex-1{flex:1}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-2{gap:8px}.gap-3{gap:12px}.gap-4{gap:16px}.gap-5{gap:20px}.gap-6{gap:24px}.gap-8{gap:32px}
+.text-center{text-align:center}.text-right{text-align:right}.text-left{text-align:left}
+.font-bold{font-weight:700}.font-extrabold{font-weight:800}.font-semibold{font-weight:600}.font-medium{font-weight:500}
+.rounded-xl{border-radius:12px}.rounded-2xl{border-radius:16px}.rounded-lg{border-radius:8px}.rounded-full{border-radius:9999px}
+.shadow-sm{box-shadow:0 1px 2px rgba(0,0,0,.05)}.shadow-lg{box-shadow:0 10px 15px -3px rgba(0,0,0,.1)}
+.uppercase{text-transform:uppercase}.tracking-wide{letter-spacing:.05em}.italic{font-style:italic}
+.whitespace-nowrap{white-space:nowrap}.leading-tight{line-height:1.25}.leading-snug{line-height:1.375}
+.min-h-0{min-height:0}.overflow-hidden{overflow:hidden}.flex-shrink-0{flex-shrink:0}
+.hidden{display:none!important}
+/* Editable inputs */
+.editable-input{background:transparent;outline:none;border:none;border-bottom:1px dashed currentColor;font-size:inherit;font-weight:inherit;color:inherit;text-align:inherit;min-width:3ch}
+.editable-pct{background:transparent;outline:none;border:none;border-bottom:1px dashed currentColor;font-size:inherit;font-weight:inherit;color:inherit;text-align:center;min-width:2ch}
+/* Tables */
+table{border-collapse:collapse;width:100%}
+th,td{padding:8px 12px}
+/* Cover slide */
+.cover-slide{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;text-align:center;gap:32px;animation:fadeIn .4s ease-out}
+.cover-icon{width:96px;height:96px;background:#1e40af;border-radius:16px;display:flex;align-items:center;justify-content:center;margin-bottom:48px;box-shadow:0 20px 25px -5px rgba(0,0,0,.1)}
+.cover-icon svg{width:48px;height:48px;color:#fff}
+.cover-pre{font-size:clamp(18px,2.5vw,30px);color:#64748b;font-weight:500}
+.cover-main{font-size:clamp(36px,5vw,72px);color:#0f172a;font-weight:700;letter-spacing:-.02em;line-height:1.1}
+.cover-sub{font-size:clamp(16px,2vw,24px);color:#2563eb;font-weight:500;max-width:600px;margin-top:32px}
+.cover-footer{padding-top:32px;border-top:1px solid #e2e8f0;width:100%;max-width:400px}
+.cover-footer p{color:#64748b;font-weight:500}
+.cover-cta{padding:16px 32px;background:#1d4ed8;color:#fff;border-radius:8px;font-weight:700;font-size:18px;border:none;cursor:pointer;display:inline-flex;align-items:center;gap:8px;box-shadow:0 10px 15px -3px rgba(0,0,0,.1)}
+.cover-cta:hover{background:#1e40af}
+</style>
+</head>
+<body>
+<div class="outer">
+<div class="frame">
+<div class="frame-inner">
+<div class="sidebar">
+<div class="sidebar-logo">S</div>
+<div class="sidebar-text">STOIQ INTELLIGENCE</div>
+<div class="sidebar-dot"></div>
+</div>
+<div class="main">
+<div class="slide-counter" id="slideCounter">1 / 16</div>
+<div class="slide-area">
+<div class="slide-content" id="slideContent"></div>
+</div>
+<div class="nav">
+<button class="prev" id="prevBtn" onclick="prevSlide()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg></button>
+<button class="next" id="nextBtn" onclick="nextSlide()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></button>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<script>
+// SVG Icons as strings
+const icons = {
+  barChart2: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>',
+  chevronRight: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>',
+  arrowRight: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>',
+  alertTriangle: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
+  package: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="16.5" y1="9.4" x2="7.5" y2="4.21"/><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>',
+  clock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+  target: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>',
+  shieldCheck: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>',
+  helpCircle: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
+  store: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>',
+  users: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>',
+  calendar: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>',
+  database: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>',
+  activity: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>',
+  zap: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>',
+  shoppingCart: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>',
+  checkCircle: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>',
+  xCircle: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>',
+  trendingUp: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>',
+  search: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>',
+  settings: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>',
+  dollarSign: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>',
+  fileText: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>',
+};
+
+function icon(name, size, cls) {
+  size = size || 24;
+  cls = cls || '';
+  return '<span style="display:inline-flex;width:'+size+'px;height:'+size+'px;'+cls+'">'+icons[name]+'</span>';
+}
+
+// State
+let currentSlide = 0;
+let ganhoCalculadora = 0;
+// Calculadora state
+let calcFat = 500000, calcEst = 300000, calcCompra = 80000;
+let calcBench = { pctEncalhe: 0.25, pctRuptura: 0.08, pctCompraErrada: 0.15 };
+let calcMelh = { reducaoEncalhe: 0.40, reducaoRuptura: 0.50, reducaoCompraErrada: 0.50 };
+const defaultBench = { pctEncalhe: 0.25, pctRuptura: 0.08, pctCompraErrada: 0.15 };
+const defaultMelh = { reducaoEncalhe: 0.40, reducaoRuptura: 0.50, reducaoCompraErrada: 0.50 };
+
+const totalSlides = 16;
+
+function brl(v) { return v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 }); }
+function brl2(v) { return v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }); }
+
+function nextSlide() { if (currentSlide < totalSlides - 1) { currentSlide++; render(); } }
+function prevSlide() { if (currentSlide > 0) { currentSlide--; render(); } }
+
+document.addEventListener('keydown', function(e) {
+  if (e.target.tagName === 'INPUT') return;
+  if (e.key === 'ArrowRight') nextSlide();
+  if (e.key === 'ArrowLeft') prevSlide();
+});
+
+function render() {
+  document.getElementById('slideCounter').textContent = (currentSlide + 1) + ' / ' + totalSlides;
+  document.getElementById('prevBtn').disabled = currentSlide === 0;
+  document.getElementById('nextBtn').disabled = currentSlide === totalSlides - 1;
+  document.getElementById('slideContent').innerHTML = renderSlide(currentSlide);
+  // Re-attach calculadora events if needed
+  if (currentSlide === 13) attachCalcEvents();
+}
+
+function renderSlide(idx) {
+  switch(idx) {
+    case 0: return slideCover();
+    case 1: return slideTeam();
+    case 2: return slideClientInterview();
+    case 3: return slideGridSmall();
+    case 4: return slideDeliverables();
+    case 5: return slideDataHealth();
+    case 6: return slideStockStatus();
+    case 7: return slideGiroEncalhados();
+    case 8: return slideSugestaoCompra();
+    case 9: return slideAcompanhamentoMeta();
+    case 10: return slideTimeline();
+    case 11: return slideNaoFazemos();
+    case 12: return slidePremissas();
+    case 13: return slideCalculadora();
+    case 14: return slidePricing();
+    case 15: return slideCoverFinal();
+    default: return '';
+  }
+}
+
+/* SLIDE 0 - Cover */
+function slideCover() {
+  return '<div class="cover-slide">' +
+    '<div class="cover-icon">' + icons.barChart2 + '</div>' +
+    '<div style="max-width:800px">' +
+      '<div class="cover-pre">Gere caixa com</div>' +
+      '<div class="cover-main">Inteligência de estoque</div>' +
+    '</div>' +
+    '<div class="cover-sub">Metodologia StoIQ</div>' +
+    '<div class="cover-footer"><p>Proposta de trabalho</p></div>' +
+  '</div>';
+}
+
+/* SLIDE 1 - Team */
+function slideTeam() {
+  var members = [
+    { name: 'Gustavo Domingues', role: 'Dados e Tecnologia', bio: 'Sócio da Padoque, engenheiro de formação e com mais de 5 anos de experiência em análise de dados e desenvolvimento de produtos dentro de consultorias.', color: '#1d4ed8', photo: 'StoIQ_Gustavo.png' },
+    { name: 'Breno Penoni', role: 'Experiência na ponta', bio: 'Fundador da Bendizê, marca de moda/varejo com canais de e-commerce e 7 lojas físicas espalhadas por Minas Gerais. Mais de 8 anos de experiência em gestão de marca e estoque.', color: '#4338ca', photo: 'StoIQ_Breno.png' },
+    { name: 'Jonas Ayres', role: 'Gestão e Finanças', bio: 'Fundador e diretor da Padoque, especialista em Finanças pela Fundação Dom Cabral (FDC). Com 13 anos de atuação sólida nas áreas de controladoria e finanças.', color: '#334155', photo: 'StoIQ_Jonas.png' },
+  ];
+  var cards = members.map(function(m) {
+    return '<div style="display:flex;flex-direction:column;background:#fff;border-radius:16px;box-shadow:0 1px 2px rgba(0,0,0,.05);border:1px solid #e2e8f0;overflow:hidden;min-height:0">' +
+      '<div style="width:100%;height:224px;background:'+m.color+';display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0">' +
+        '<img src="'+m.photo+'" alt="'+m.name+'" style="width:100%;height:100%;object-fit:cover;object-position:top" onerror="this.style.display=\'none\';this.parentElement.innerHTML=\'<span style=color:rgba(255,255,255,.4);font-size:36px;font-weight:700>'+m.name.split(' ').map(function(w){return w[0]}).join('')+'</span>\'">' +
+      '</div>' +
+      '<div style="padding:12px 16px;text-align:center;display:flex;flex-direction:column;gap:10px;flex-shrink:0">' +
+        '<h3 style="font-size:16px;font-weight:700;color:#1e293b;line-height:1.25">'+m.name+'</h3>' +
+        '<span style="font-size:12px;font-weight:600;color:#2563eb">'+m.role+'</span>' +
+        '<p style="font-size:12px;color:#64748b;line-height:1.375">'+m.bio+'</p>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+  return '<div class="slide-std">' +
+    '<div class="slide-header" style="margin-bottom:16px"><h2>Quem somos</h2><p>Expertise prática combinada com inteligência de dados</p></div>' +
+    '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;flex:1;min-height:0">'+cards+'</div>' +
+  '</div>';
+}
+
+/* SLIDE 2 - Client Interview */
+function slideClientInterview() {
+  var sections = [
+    { icon: 'store', label: 'História da empresa', question: 'Como surgiu a empresa? Qual é o modelo de negócio hoje (canais, produtos, estrutura)?' },
+    { icon: 'users', label: 'Organograma', question: 'Quem são as pessoas envolvidas na operação? Quem cuida das compras, do estoque, das vendas?' },
+    { icon: 'calendar', label: 'Rituais de gestão do estoque', question: 'Hoje, como é feita a gestão do estoque? Existe alguma rotina, reunião ou processo estabelecido?' },
+    { icon: 'barChart2', label: 'Conhecimento atual sobre gestão de estoque', question: 'O que você já conhece sobre curva ABC, cobertura de estoque, ruptura e encalhe?' },
+    { icon: 'alertTriangle', label: 'Desafios e principais dores', question: 'Quais são os maiores problemas que você enfrenta hoje na gestão de estoque e planejamento de compras?' },
+    { icon: 'target', label: 'Expectativas com a StoIQ', question: 'O que você espera conquistar com essa consultoria? Qual seria o resultado ideal em 6 meses?' },
+  ];
+  var cards = sections.map(function(s) {
+    return '<div style="display:flex;gap:12px;align-items:center;background:#f8fafc;border-radius:12px;padding:12px 16px;border:1px solid #e2e8f0">' +
+      '<div style="width:40px;height:40px;background:#dbeafe;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#1d4ed8">' + icon(s.icon, 22) + '</div>' +
+      '<div>' +
+        '<p style="font-size:14px;font-weight:700;color:#1e293b;line-height:1.25">'+s.label+'</p>' +
+        '<p style="font-size:12px;color:#64748b;font-style:italic;line-height:1.375;margin-top:2px">'+s.question+'</p>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+  return '<div class="slide-std">' +
+    '<div class="slide-header" style="margin-bottom:16px"><h2>Quem são vocês?</h2><p>Antes de começar, queremos entender melhor o seu negócio</p></div>' +
+    '<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px;flex:1;align-content:center">'+cards+'</div>' +
+  '</div>';
+}
+
+/* SLIDE 3 - Grid Small */
+function slideGridSmall() {
+  var cards = [
+    { icon: 'alertTriangle', color: '#dc2626', title: 'Medo de comprar errado', text: '"Não sei o que comprar agora: não quero deixar faltar para o cliente, mas tenho pavor que fique sobrando no estoque."' },
+    { icon: 'package', color: '#9333ea', title: 'Dinheiro parado no estoque', text: '"Nem sei exatamente o que tem no meu estoque, mas tenho certeza que tem um monte de dinheiro parado lá há um tempão."' },
+    { icon: 'clock', color: '#d97706', title: 'Planejamento de compra demorado', text: '"Gasto muito tempo para planejar a compra e mesmo assim não tenho uma rotina clara de quando e quanto pedir."' },
+    { icon: 'target', color: '#2563eb', title: 'Meta sem base real', text: '"Não sei que meta colocar. Às vezes parece inalcançável, às vezes parece que ficou fácil demais."' },
+    { icon: 'shieldCheck', color: '#059669', title: 'Estoque insuficiente para a meta', text: '"Não sei se tenho estoque suficiente para bater a meta que prometi em cada um dos meus canais."' },
+    { icon: 'helpCircle', color: '#ea580c', title: 'Vendas perdidas', text: '"Não sei se estou perdendo vendas por falta de estoque."' },
+  ];
+  var html = cards.map(function(c) {
+    return '<div style="background:#fff;padding:12px;border-radius:12px;box-shadow:0 1px 2px rgba(0,0,0,.05);border:1px solid #e2e8f0;display:flex;flex-direction:column">' +
+      '<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">' +
+        '<div style="padding:6px;border-radius:8px;background:#f8fafc;color:'+c.color+';display:flex;flex-shrink:0">' + icon(c.icon, 16) + '</div>' +
+        '<h3 style="font-size:14px;font-weight:700;color:#1e293b;line-height:1.25">'+c.title+'</h3>' +
+      '</div>' +
+      '<p style="font-size:12px;color:#475569;line-height:1.375;font-style:italic">'+c.text+'</p>' +
+    '</div>';
+  }).join('');
+  return '<div class="slide-std">' +
+    '<div class="slide-header" style="margin-bottom:16px"><h2>Nossos clientes chegam até nós com esses problemas</h2><p>Você se identifica com algum desses?</p></div>' +
+    '<div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:24px">' +
+      '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;grid-auto-rows:1fr">'+html+'</div>' +
+      '<div style="background:#eff6ff;border-left:4px solid #2563eb;padding:16px;border-radius:0 8px 8px 0">' +
+        '<p style="font-size:16px;font-weight:600;color:#1e3a8a">Se você já pensou alguma dessas frases, a StoIQ foi feita para você.</p>' +
+      '</div>' +
+    '</div>' +
+  '</div>';
+}
+
+/* SLIDE 4 - Deliverables */
+function slideDeliverables() {
+  var items = [
+    { number: '01', icon: 'database', title: 'Saúde dos dados', desc: 'Auditamos o ERP, identificamos inconsistências e orientamos o que corrigir — a execução fica com você. Decisão boa começa com dado confiável.', borderColor: '#94a3b8', textColor: '#475569' },
+    { number: '02', icon: 'activity', title: 'Raio-X do estoque', desc: 'Panorama completo: quanto está saudável, encalhado, em ruptura ou em estado crítico — por curva ABC, categoria e canal. Quanto já foi perdido em vendas e quanto ainda será.', borderColor: '#3b82f6', textColor: '#2563eb' },
+    { number: '03', icon: 'zap', title: 'Sugestão de giro de estoque', desc: 'Recomendações de ações para acelerar o giro: promoções, redistribuição entre canais e liquidação de encalhados.', borderColor: '#f59e0b', textColor: '#d97706' },
+    { number: '04', icon: 'shoppingCart', title: 'Sugestão de compra', desc: 'Relatório Open-to-Buy mastigado por fornecedor: SKU, quantidade e valor. Você recebe pronto para executar.', borderColor: '#22c55e', textColor: '#16a34a' },
+    { number: '05', icon: 'target', title: 'Previsão de vendas', desc: 'Análise se você tem ou terá estoque suficiente para bater as metas de venda definidas.', borderColor: '#a855f7', textColor: '#7e22ce' },
+  ];
+  var html = items.map(function(item, idx) {
+    var extra = '';
+    if (idx === items.length - 1 && items.length % 2 !== 0) {
+      extra = 'grid-column:1/3;max-width:calc(50% - 12px);margin:0 auto;width:100%;';
+    }
+    return '<div style="background:#fff;border-radius:16px;padding:12px;border-left:4px solid '+item.borderColor+';box-shadow:0 1px 2px rgba(0,0,0,.05);display:flex;gap:8px;'+extra+'">' +
+      '<div style="flex-shrink:0"><span style="font-size:24px;font-weight:900;color:'+item.textColor+';opacity:.2;line-height:1">'+item.number+'</span></div>' +
+      '<div style="flex:1;min-width:0">' +
+        '<div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">' +
+          '<span style="color:'+item.textColor+'">' + icon(item.icon, 16) + '</span>' +
+          '<h3 style="font-size:14px;font-weight:700;color:#1e293b">'+item.title+'</h3>' +
+        '</div>' +
+        '<p style="font-size:12px;color:#475569;line-height:1.375">'+item.desc+'</p>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+  return '<div class="slide-std">' +
+    '<div class="slide-header" style="margin-bottom:16px"><h2>O que entregamos</h2><p>Quatro entregas que transformam dados em decisões de compra</p></div>' +
+    '<div style="flex:1;display:flex;flex-direction:column;justify-content:center">' +
+      '<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px 24px;grid-auto-rows:1fr">'+html+'</div>' +
+    '</div>' +
+  '</div>';
+}
+
+/* SLIDE 5 - Data Health */
+function slideDataHealth() {
+  var checks = [
+    { label: 'SKUs vazios', desc: 'Produtos sem nome ou descrição que tornam impossível identificar o que está sendo vendido ou comprado.' },
+    { label: 'SKUs duplicados', desc: 'O mesmo produto cadastrado mais de uma vez divide o histórico de vendas e distorce qualquer análise.' },
+    { label: 'Estoque negativo', desc: 'Saldo negativo indica movimentação sem registro ou divergência entre físico e sistema.' },
+    { label: 'Preço de custo vazio', desc: 'Sem custo não é possível calcular margem, cobertura financeira nem sugerir compra com orçamento.' },
+    { label: 'Preço de venda vazio', desc: 'Impede o cálculo de faturamento potencial e torna inviável qualquer projeção de meta.' },
+    { label: 'Categoria vazia', desc: 'Sem categoria não há curva ABC por departamento nem análise segmentada por linha de produto.' },
+    { label: 'Fornecedor vazio', desc: 'Sem fornecedor não é possível agrupar sugestões de compra por pedido nem respeitar lead times.' },
+    { label: 'Sem venda nos últimos 180 dias', desc: 'Produto parado há mais de 6 meses é candidato a encalhe e precisa de decisão imediata.' },
+  ];
+  var html = checks.map(function(c) {
+    return '<div style="display:flex;align-items:flex-start;gap:12px;background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:14px">' +
+      '<div style="flex-shrink:0;width:24px;height:24px;border-radius:50%;background:#fef3c7;display:flex;align-items:center;justify-content:center;margin-top:2px">' +
+        '<span style="color:#d97706;display:flex">' + icon('alertTriangle', 13) + '</span>' +
+      '</div>' +
+      '<div>' +
+        '<p style="font-size:14px;font-weight:700;color:#1e293b;line-height:1.25">'+c.label+'</p>' +
+        '<p style="font-size:12px;color:#64748b;line-height:1.375;margin-top:2px">'+c.desc+'</p>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+  return '<div class="slide-std-compact">' +
+    '<div class="slide-header" style="margin-bottom:16px"><h2>Saúde dos Dados</h2><p>Antes de qualquer análise, auditamos a qualidade do seu cadastro. Dado ruim gera decisão ruim.</p></div>' +
+    '<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;flex:1;align-content:center">'+html+'</div>' +
+  '</div>';
+}
+
+/* SLIDE 6 - Stock Status */
+function slideStockStatus() {
+  var rows = [
+    { key: 'saudavel', label: 'Saudável', total: 56, pct: '7%', a: 29, pctA: '15%', b: 19, pctB: '9%', c: 8, pctC: '2%' },
+    { key: 'encalhado', label: 'Encalhado', total: 444, pct: '55%', a: 63, pctA: '32%', b: 134, pctB: '60%', c: 247, pctC: '64%' },
+    { key: 'ruptura', label: 'Ruptura', total: 119, pct: '15%', a: 56, pctA: '28%', b: 24, pctB: '11%', c: 39, pctC: '10%' },
+    { key: 'critico', label: 'Crítico', total: 188, pct: '23%', a: 49, pctA: '25%', b: 45, pctB: '20%', c: 94, pctC: '24%' },
+  ];
+  var dotColors = { saudavel: '#22c55e', encalhado: '#fbbf24', ruptura: '#f97316', critico: '#ef4444' };
+  var totals = { total: 807, a: 197, b: 222, c: 388 };
+
+  var tableRows = rows.map(function(r, idx) {
+    var bg = idx % 2 === 0 ? '#fff' : 'rgba(248,250,252,.6)';
+    return '<tr style="background:'+bg+'">' +
+      '<td style="padding:8px 12px;font-weight:600;color:#334155;white-space:nowrap"><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:'+dotColors[r.key]+';margin-right:6px;vertical-align:middle"></span>'+r.label+'</td>' +
+      '<td style="padding:8px 12px;text-align:right;color:#334155;border-left:1px solid #f1f5f9;font-weight:500">'+r.total+'</td>' +
+      '<td style="padding:8px 12px;text-align:right;color:#94a3b8">'+r.pct+'</td>' +
+      '<td style="padding:8px 12px;text-align:right;color:#1d4ed8;border-left:1px solid #f1f5f9;font-weight:500;background:rgba(219,234,254,.4)">'+r.a+'</td>' +
+      '<td style="padding:8px 12px;text-align:right;color:#60a5fa;background:rgba(219,234,254,.4)">'+r.pctA+'</td>' +
+      '<td style="padding:8px 12px;text-align:right;color:#334155;border-left:1px solid #f1f5f9;font-weight:500">'+r.b+'</td>' +
+      '<td style="padding:8px 12px;text-align:right;color:#94a3b8">'+r.pctB+'</td>' +
+      '<td style="padding:8px 12px;text-align:right;color:#334155;border-left:1px solid #f1f5f9;font-weight:500">'+r.c+'</td>' +
+      '<td style="padding:8px 12px;text-align:right;color:#94a3b8">'+r.pctC+'</td>' +
+    '</tr>';
+  }).join('');
+
+  var table = '<table style="font-size:12px;border-collapse:collapse;border-radius:12px;overflow:hidden;box-shadow:0 1px 2px rgba(0,0,0,.05);border:1px solid #e2e8f0">' +
+    '<thead>' +
+      '<tr style="background:#f1f5f9;color:#475569;font-weight:600">' +
+        '<th style="padding:8px 12px;text-align:left">Status</th>' +
+        '<th style="padding:8px 12px;text-align:center;border-left:1px solid #e2e8f0" colspan="2">Total</th>' +
+        '<th style="padding:8px 12px;text-align:center;border-left:1px solid #e2e8f0;background:#eff6ff;color:#1d4ed8" colspan="2">A</th>' +
+        '<th style="padding:8px 12px;text-align:center;border-left:1px solid #e2e8f0" colspan="2">B</th>' +
+        '<th style="padding:8px 12px;text-align:center;border-left:1px solid #e2e8f0" colspan="2">C</th>' +
+      '</tr>' +
+      '<tr style="background:#f8fafc;color:#64748b;font-weight:500;font-size:11px">' +
+        '<th style="padding:4px 12px;text-align:left"></th>' +
+        '<th style="padding:4px 12px;text-align:right;border-left:1px solid #e2e8f0">Qtd</th><th style="padding:4px 12px;text-align:right">%</th>' +
+        '<th style="padding:4px 12px;text-align:right;border-left:1px solid #e2e8f0;background:#eff6ff">Qtd</th><th style="padding:4px 12px;text-align:right;background:#eff6ff">%</th>' +
+        '<th style="padding:4px 12px;text-align:right;border-left:1px solid #e2e8f0">Qtd</th><th style="padding:4px 12px;text-align:right">%</th>' +
+        '<th style="padding:4px 12px;text-align:right;border-left:1px solid #e2e8f0">Qtd</th><th style="padding:4px 12px;text-align:right">%</th>' +
+      '</tr>' +
+    '</thead>' +
+    '<tbody>' + tableRows +
+      '<tr style="background:#f1f5f9;font-weight:700;color:#334155;border-top:1px solid #e2e8f0">' +
+        '<td style="padding:8px 12px">Total</td>' +
+        '<td style="padding:8px 12px;text-align:right;border-left:1px solid #e2e8f0">'+totals.total+'</td><td></td>' +
+        '<td style="padding:8px 12px;text-align:right;color:#1d4ed8;border-left:1px solid #e2e8f0;background:rgba(219,234,254,.4)">'+totals.a+'</td><td style="background:rgba(219,234,254,.4)"></td>' +
+        '<td style="padding:8px 12px;text-align:right;border-left:1px solid #e2e8f0">'+totals.b+'</td><td></td>' +
+        '<td style="padding:8px 12px;text-align:right;border-left:1px solid #e2e8f0">'+totals.c+'</td><td></td>' +
+      '</tr>' +
+    '</tbody></table>';
+
+  var statuses = [
+    { label: 'Saudável', dot: '#22c55e', text: '#15803d', bg: '#f0fdf4', border: '#bbf7d0', def: 'Dentro da cobertura ideal e sem perder vendas por ruptura.', ex: 'Produto com cobertura de 45 dias e lead time de 30 dias — estoque certo na quantidade certa.' },
+    { label: 'Encalhado', dot: '#fbbf24', text: '#b45309', bg: '#fffbeb', border: '#fde68a', def: 'Acima da cobertura ideal definida — capital de giro preso em mercadoria parada.', ex: 'Produto comprado para 90 dias de estoque, mas que vende em ritmo de 30 dias — sobra 60 dias encalhados.' },
+    { label: 'Ruptura', dot: '#f97316', text: '#c2410c', bg: '#fff7ed', border: '#fed7aa', def: 'Tem estoque, mas insuficiente para cobrir o lead time do fornecedor.', ex: 'Restam 10 peças, vende 5/dia, lead time 7 dias — vai zerar antes da reposição chegar.' },
+    { label: 'Crítico', dot: '#ef4444', text: '#b91c1c', bg: '#fef2f2', border: '#fecaca', def: 'Sem estoque hoje — perdendo venda agora.', ex: 'SKU zerado na loja: o cliente quer comprar, mas não tem produto disponível.' },
+  ];
+  var statusCards = statuses.map(function(s) {
+    return '<div style="background:'+s.bg+';border:1px solid '+s.border+';border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:6px">' +
+      '<div style="display:flex;align-items:center;gap:8px"><span style="width:12px;height:12px;border-radius:50%;background:'+s.dot+';flex-shrink:0"></span><span style="font-weight:700;font-size:14px;color:'+s.text+'">'+s.label+'</span></div>' +
+      '<p style="font-size:12px;color:#334155;font-weight:500;line-height:1.375">'+s.def+'</p>' +
+      '<p style="font-size:11px;color:#64748b;font-style:italic;line-height:1.375;border-top:1px solid rgba(226,232,240,.6);padding-top:6px">Ex: '+s.ex+'</p>' +
+    '</div>';
+  }).join('');
+
+  return '<div class="slide-std">' +
+    '<div class="slide-header" style="margin-bottom:16px"><h2>Raio-X do Estoque na prática</h2><p>Como classificamos cada SKU e o que isso significa para o seu negócio</p></div>' +
+    '<div style="display:flex;gap:24px;flex:1;min-height:0">' +
+      '<div style="display:flex;flex-direction:column;flex-shrink:0;justify-content:center">'+table+'</div>' +
+      '<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;flex:1;min-height:0;align-content:center">'+statusCards+'</div>' +
+    '</div>' +
+  '</div>';
+}
+
+/* SLIDE 7 - Giro Encalhados */
+function slideGiroEncalhados() {
+  var summaryRows = [
+    { label: 'Quantidade excedente', total: '444', a: '63', b: '134', c: '247' },
+    { label: 'Valor de custo total', total: 'R$ 57.720', a: 'R$ 8.190', b: 'R$ 17.420', c: 'R$ 32.110' },
+    { label: 'Valor de venda total', total: 'R$ 230.880', a: 'R$ 32.760', b: 'R$ 69.680', c: 'R$ 128.440' },
+  ];
+  var kpiConfigs = [
+    { bg: '#fffbeb', border: '#fde68a', labelColor: '#d97706', valueColor: '#92400e', iconName: 'package' },
+    { bg: '#f8fafc', border: '#e2e8f0', labelColor: '#64748b', valueColor: '#1e293b', iconName: 'dollarSign' },
+    { bg: '#f0fdf4', border: '#bbf7d0', labelColor: '#16a34a', valueColor: '#166534', iconName: 'trendingUp' },
+  ];
+  var kpis = summaryRows.map(function(row, idx) {
+    var c = kpiConfigs[idx];
+    return '<div style="background:'+c.bg+';border:1px solid '+c.border+';border-radius:12px;padding:12px 16px;display:flex;align-items:center;gap:12px">' +
+      '<div style="width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.05);color:'+c.labelColor+'">' + icon(c.iconName, 18) + '</div>' +
+      '<div style="min-width:0">' +
+        '<p style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:'+c.labelColor+'">'+row.label+'</p>' +
+        '<p style="font-size:18px;font-weight:800;line-height:1.25;color:'+c.valueColor+'">'+row.total+'</p>' +
+        '<div style="display:flex;gap:8px;margin-top:2px">' +
+          [['A', row.a], ['B', row.b], ['C', row.c]].map(function(pair) {
+            return '<span style="font-size:10px;color:#64748b"><span style="font-weight:700;color:#475569">'+pair[0]+'</span> '+pair[1]+'</span>';
+          }).join('') +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+
+  var discounts = [
+    { pct: '0%', total: 'R$ 230.880', a: 'R$ 32.760', b: 'R$ 69.680', c: 'R$ 128.440' },
+    { pct: '10%', total: 'R$ 207.792', a: 'R$ 29.484', b: 'R$ 62.712', c: 'R$ 115.596' },
+    { pct: '20%', total: 'R$ 184.704', a: 'R$ 26.208', b: 'R$ 55.744', c: 'R$ 102.752' },
+    { pct: '30%', total: 'R$ 161.616', a: 'R$ 22.932', b: 'R$ 48.776', c: 'R$ 89.908' },
+    { pct: '40%', total: 'R$ 138.528', a: 'R$ 19.656', b: 'R$ 41.808', c: 'R$ 77.064' },
+    { pct: '50%', total: 'R$ 115.440', a: 'R$ 16.380', b: 'R$ 34.840', c: 'R$ 64.220' },
+    { pct: '60%', total: 'R$ 92.352', a: 'R$ 13.104', b: 'R$ 27.872', c: 'R$ 51.376' },
+    { pct: '70%', total: 'R$ 69.264', a: 'R$ 9.828', b: 'R$ 20.904', c: 'R$ 38.532' },
+  ];
+  var discountRows = discounts.map(function(r, idx) {
+    var bg = idx % 2 === 0 ? '#fff' : 'rgba(248,250,252,.6)';
+    var pctColor = idx === 0 ? '#94a3b8' : '#d97706';
+    return '<tr style="background:'+bg+'">' +
+      '<td style="padding:6px 16px;font-weight:700;color:'+pctColor+'">'+r.pct+'</td>' +
+      '<td style="padding:6px 16px;text-align:right;font-weight:600;color:#1e293b">'+r.total+'</td>' +
+      '<td style="padding:6px 16px;text-align:right;color:#1d4ed8;font-weight:500;border-left:1px solid #f1f5f9;background:rgba(219,234,254,.3)">'+r.a+'</td>' +
+      '<td style="padding:6px 16px;text-align:right;color:#334155;font-weight:500;border-left:1px solid #f1f5f9">'+r.b+'</td>' +
+      '<td style="padding:6px 16px;text-align:right;color:#334155;font-weight:500;border-left:1px solid #f1f5f9">'+r.c+'</td>' +
+    '</tr>';
+  }).join('');
+
+  return '<div class="slide-std-compact" style="gap:16px">' +
+    '<div class="slide-header"><h2>Sugestão de Giro de Encalhados</h2><p>Quanto capital de giro está parado e quanto você pode recuperar com cada nível de desconto</p></div>' +
+    '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;flex-shrink:0">'+kpis+'</div>' +
+    '<div style="flex:1;display:flex;flex-direction:column;min-height:0">' +
+      '<p style="font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px">Potencial de caixa por desconto médio</p>' +
+      '<div style="border-radius:12px;overflow:hidden;border:1px solid #e2e8f0;box-shadow:0 1px 2px rgba(0,0,0,.05)">' +
+        '<table style="font-size:12px">' +
+          '<thead><tr style="background:#f59e0b;color:#fff;font-weight:600">' +
+            '<th style="padding:8px 16px;text-align:left">Desconto</th>' +
+            '<th style="padding:8px 16px;text-align:right">Total</th>' +
+            '<th style="padding:8px 16px;text-align:right;border-left:1px solid #d97706;background:#d97706">A</th>' +
+            '<th style="padding:8px 16px;text-align:right;border-left:1px solid #d97706">B</th>' +
+            '<th style="padding:8px 16px;text-align:right;border-left:1px solid #d97706">C</th>' +
+          '</tr></thead>' +
+          '<tbody>'+discountRows+'</tbody>' +
+        '</table>' +
+      '</div>' +
+    '</div>' +
+  '</div>';
+}
+
+/* SLIDE 8 - Sugestao Compra */
+function slideSugestaoCompra() {
+  var params = [
+    { label: 'Cobertura ideal', value: '2\u00d7 lead time', desc: 'Estoque suficiente para vender durante o lead time e ainda ter reserva para variações de demanda', bg: '#eff6ff', border: '#bfdbfe', labelColor: '#3b82f6', valueColor: '#1e40af' },
+    { label: 'Próxima compra', value: '05/04/2025', desc: 'Data-limite para emissão do pedido garantindo reposição antes do estoque zerar', bg: '#f0fdf4', border: '#bbf7d0', labelColor: '#16a34a', valueColor: '#166534' },
+    { label: 'Orçamento disponível', value: 'R$ 45.000', desc: 'Teto de investimento definido com o cliente para o ciclo de compra', bg: '#f8fafc', border: '#e2e8f0', labelColor: '#64748b', valueColor: '#1e293b' },
+  ];
+  var paramsHtml = params.map(function(p) {
+    return '<div style="background:'+p.bg+';border:1px solid '+p.border+';border-radius:12px;padding:12px 16px">' +
+      '<p style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:'+p.labelColor+';margin-bottom:2px">'+p.label+'</p>' +
+      '<p style="font-size:20px;font-weight:800;color:'+p.valueColor+';line-height:1.25">'+p.value+'</p>' +
+      '<p style="font-size:11px;color:#94a3b8;line-height:1.375;margin-top:4px">'+p.desc+'</p>' +
+    '</div>';
+  }).join('');
+
+  var items = [
+    { sku: 'CAL-FEM-001', name: 'Calça Slim Feminina P', estoque: 4, vendaDia: 2.1, leadtime: 15, coberturaAtual: 2, sugestao: 55, custo: 89.90 },
+    { sku: 'CAL-FEM-002', name: 'Calça Slim Feminina M', estoque: 0, vendaDia: 3.4, leadtime: 15, coberturaAtual: 0, sugestao: 102, custo: 89.90 },
+    { sku: 'CAL-FEM-003', name: 'Calça Slim Feminina G', estoque: 11, vendaDia: 1.8, leadtime: 15, coberturaAtual: 6, sugestao: 43, custo: 89.90 },
+    { sku: 'VES-FEM-022', name: 'Vestido Midi Floral P', estoque: 2, vendaDia: 1.5, leadtime: 20, coberturaAtual: 1, sugestao: 58, custo: 129.90 },
+    { sku: 'VES-FEM-023', name: 'Vestido Midi Floral M', estoque: 0, vendaDia: 2.2, leadtime: 20, coberturaAtual: 0, sugestao: 88, custo: 129.90 },
+    { sku: 'BLU-FEM-008', name: 'Blusa Linho Off-White M', estoque: 18, vendaDia: 0.9, leadtime: 20, coberturaAtual: 20, sugestao: 18, custo: 69.90 },
+    { sku: 'BLU-FEM-009', name: 'Blusa Linho Off-White G', estoque: 3, vendaDia: 1.1, leadtime: 20, coberturaAtual: 3, sugestao: 41, custo: 69.90 },
+  ];
+  var totalSug = items.reduce(function(s,i){return s+i.sugestao},0);
+  var totalInv = items.reduce(function(s,i){return s+i.sugestao*i.custo},0);
+
+  var tableRows = items.map(function(item, idx) {
+    var cobIdeal = 2 * item.leadtime;
+    var bg = idx % 2 === 0 ? '#fff' : 'rgba(248,250,252,.5)';
+    var cobBg, cobColor;
+    if (item.coberturaAtual === 0) { cobBg = '#fee2e2'; cobColor = '#b91c1c'; bg = '#fef2f2'; }
+    else if (item.coberturaAtual < item.leadtime) { cobBg = '#ffedd5'; cobColor = '#c2410c'; bg = '#fff7ed'; }
+    else { cobBg = '#f1f5f9'; cobColor = '#475569'; }
+    var estColor = item.estoque === 0 ? '#dc2626' : '#334155';
+    var inv = (item.sugestao * item.custo).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    return '<tr style="background:'+bg+'">' +
+      '<td style="padding:6px 12px;font-family:monospace;color:#94a3b8;white-space:nowrap">'+item.sku+'</td>' +
+      '<td style="padding:6px 12px;font-weight:600;color:#334155;border-left:1px solid #f1f5f9;white-space:nowrap">'+item.name+'</td>' +
+      '<td style="padding:6px 12px;text-align:right;font-weight:700;border-left:1px solid #f1f5f9;color:'+estColor+'">'+item.estoque+'</td>' +
+      '<td style="padding:6px 12px;text-align:right;color:#475569;border-left:1px solid #f1f5f9">'+item.vendaDia.toFixed(1)+'</td>' +
+      '<td style="padding:6px 12px;text-align:right;color:#475569;border-left:1px solid #f1f5f9">'+item.leadtime+'d</td>' +
+      '<td style="padding:6px 12px;text-align:right;border-left:1px solid #f1f5f9"><span style="display:inline-block;padding:2px 6px;border-radius:4px;font-weight:700;background:'+cobBg+';color:'+cobColor+'">'+item.coberturaAtual+'d</span><span style="color:#cbd5e1;margin-left:4px;font-size:10px">/'+cobIdeal+'d</span></td>' +
+      '<td style="padding:6px 12px;text-align:right;font-weight:700;color:#15803d;border-left:1px solid #f1f5f9;background:rgba(240,253,244,.4)">'+item.sugestao+' un</td>' +
+      '<td style="padding:6px 12px;text-align:right;font-weight:700;color:#166534;border-left:1px solid #f1f5f9;background:rgba(240,253,244,.4);white-space:nowrap">'+inv+'</td>' +
+    '</tr>';
+  }).join('');
+
+  return '<div class="slide-std-compact" style="gap:12px">' +
+    '<div class="slide-header"><h2>Sugestão de Compra</h2><p>Relatório por fornecedor com SKU, quantidade e investimento — pronto para executar</p></div>' +
+    '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;flex-shrink:0">'+paramsHtml+'</div>' +
+    '<div style="flex:1;display:flex;flex-direction:column;min-height:0">' +
+      '<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">' +
+        '<p style="font-size:11px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.05em">Feminino — Fornecedor: Studio Moda</p>' +
+        '<span style="font-size:10px;font-weight:700;background:#dbeafe;color:#1d4ed8;padding:2px 6px;border-radius:4px">Curva A</span>' +
+      '</div>' +
+      '<div style="border-radius:12px;overflow:hidden;border:1px solid #e2e8f0;box-shadow:0 1px 2px rgba(0,0,0,.05);flex:1">' +
+        '<table style="font-size:12px">' +
+          '<thead><tr style="background:#1d4ed8;color:#fff;font-weight:600">' +
+            '<th style="padding:8px 12px;text-align:left">SKU</th>' +
+            '<th style="padding:8px 12px;text-align:left;border-left:1px solid #2563eb">Referência</th>' +
+            '<th style="padding:8px 12px;text-align:right;border-left:1px solid #2563eb">Estoque</th>' +
+            '<th style="padding:8px 12px;text-align:right;border-left:1px solid #2563eb">Venda/dia</th>' +
+            '<th style="padding:8px 12px;text-align:right;border-left:1px solid #2563eb">Lead time</th>' +
+            '<th style="padding:8px 12px;text-align:right;border-left:1px solid #2563eb">Cobertura atual</th>' +
+            '<th style="padding:8px 12px;text-align:right;border-left:1px solid #3b82f6;background:#15803d">Sugestão</th>' +
+            '<th style="padding:8px 12px;text-align:right;border-left:1px solid #3b82f6;background:#15803d">Investimento</th>' +
+          '</tr></thead>' +
+          '<tbody>'+tableRows+
+            '<tr style="background:#15803d;color:#fff;font-weight:700;border-top:2px solid #166534">' +
+              '<td colspan="6" style="padding:8px 12px;text-align:right">Total do pedido</td>' +
+              '<td style="padding:8px 12px;text-align:right;border-left:1px solid #16a34a">'+totalSug+' un</td>' +
+              '<td style="padding:8px 12px;text-align:right;border-left:1px solid #16a34a;white-space:nowrap">'+totalInv.toLocaleString('pt-BR',{style:'currency',currency:'BRL'})+'</td>' +
+            '</tr>' +
+          '</tbody>' +
+        '</table>' +
+      '</div>' +
+    '</div>' +
+  '</div>';
+}
+
+/* SLIDE 9 - Acompanhamento Meta */
+function slideAcompanhamentoMeta() {
+  var periodo = { mes: 'Março 2025', diaAtual: 13, totalDias: 31 };
+  var totais = {
+    meta: { label: 'Meta do mês', value: 85000 },
+    vendido: { label: 'Vendido até 13/03', value: 38420 },
+    estoque: { label: 'Estoque disponível', value: 52300 },
+    aEntregar: { label: 'Pedidos a entregar', value: 18600 },
+  };
+  var categorias = [
+    { nome: 'Feminino', meta: 42000, vendido: 19800, estoque: 27400, aEntregar: 9200 },
+    { nome: 'Masculino', meta: 28000, vendido: 12600, estoque: 17300, aEntregar: 6800 },
+    { nome: 'Acessórios', meta: 15000, vendido: 6020, estoque: 7600, aEntregar: 2600 },
+  ];
+  var ritmoAtual = totais.vendido.value / periodo.diaAtual;
+  var projecao = Math.round(ritmoAtual * periodo.totalDias);
+  var disponivel = totais.estoque.value + totais.aEntregar.value;
+  var falta = totais.meta.value - totais.vendido.value;
+  var pctMes = Math.round((periodo.diaAtual / periodo.totalDias) * 100);
+  var pctVendido = Math.round((totais.vendido.value / totais.meta.value) * 100);
+  var statusGeral;
+  if (disponivel >= falta) statusGeral = { label: 'Vai bater', bg: '#dcfce7', text: '#15803d', border: '#86efac' };
+  else if (disponivel >= falta * 0.85) statusGeral = { label: 'Em risco', bg: '#fef3c7', text: '#b45309', border: '#fcd34d' };
+  else statusGeral = { label: 'Não vai bater', bg: '#fee2e2', text: '#b91c1c', border: '#fca5a5' };
+
+  var catRows = categorias.map(function(cat, idx) {
+    var faltaCat = cat.meta - cat.vendido;
+    var dispCat = cat.estoque + cat.aEntregar;
+    var pctCat = Math.round((cat.vendido / cat.meta) * 100);
+    var st;
+    if (dispCat >= faltaCat) st = { label: 'OK', bg: '#dcfce7', text: '#15803d' };
+    else if (dispCat >= faltaCat * 0.85) st = { label: 'Risco', bg: '#fef3c7', text: '#b45309' };
+    else st = { label: 'Gap', bg: '#fee2e2', text: '#b91c1c' };
+    var rowBg = idx % 2 === 0 ? '#fff' : 'rgba(248,250,252,.5)';
+    return '<tr style="background:'+rowBg+'">' +
+      '<td style="padding:8px 16px;font-weight:700;color:#1e293b">'+cat.nome+'</td>' +
+      '<td style="padding:8px 16px;text-align:right;color:#475569;border-left:1px solid #f1f5f9">'+brl(cat.meta)+'</td>' +
+      '<td style="padding:8px 16px;text-align:right;font-weight:600;color:#1d4ed8;border-left:1px solid #f1f5f9">'+brl(cat.vendido)+'</td>' +
+      '<td style="padding:8px 16px;text-align:right;border-left:1px solid #f1f5f9"><div style="display:flex;align-items:center;justify-content:flex-end;gap:6px"><div style="width:64px;height:6px;background:#f1f5f9;border-radius:9999px;overflow:hidden"><div style="height:100%;background:#60a5fa;border-radius:9999px;width:'+Math.min(pctCat,100)+'%"></div></div><span style="color:#475569;font-weight:500">'+pctCat+'%</span></div></td>' +
+      '<td style="padding:8px 16px;text-align:right;font-weight:600;color:#dc2626;border-left:1px solid #f1f5f9">'+brl(faltaCat)+'</td>' +
+      '<td style="padding:8px 16px;text-align:right;color:#475569;border-left:1px solid #f1f5f9">'+brl(cat.estoque)+'</td>' +
+      '<td style="padding:8px 16px;text-align:right;color:#7e22ce;font-weight:500;border-left:1px solid #f1f5f9">'+brl(cat.aEntregar)+'</td>' +
+      '<td style="padding:8px 16px;text-align:right;font-weight:700;color:#1e293b;border-left:1px solid #f1f5f9;background:#f8fafc">'+brl(dispCat)+'</td>' +
+      '<td style="padding:8px 16px;text-align:center;border-left:1px solid #f1f5f9;background:#f8fafc"><span style="display:inline-block;padding:2px 8px;border-radius:9999px;font-size:10px;font-weight:700;background:'+st.bg+';color:'+st.text+'">'+st.label+'</span></td>' +
+    '</tr>';
+  }).join('');
+
+  return '<div class="slide-std-compact" style="gap:24px">' +
+    '<div style="display:flex;align-items:flex-start;justify-content:space-between">' +
+      '<div class="slide-header"><h2>Previsão de Vendas</h2><p>Você vai bater a meta? Cruzamos vendas realizadas, estoque disponível e pedidos a entregar</p></div>' +
+      '<div style="display:flex;align-items:center;gap:8px;padding:8px 16px;border-radius:12px;border:1px solid '+statusGeral.border+';background:'+statusGeral.bg+';flex-shrink:0"><span style="font-size:14px;font-weight:700;color:'+statusGeral.text+'">'+statusGeral.label+'</span></div>' +
+    '</div>' +
+    '<div style="display:grid;grid-template-columns:1fr 2fr 1fr 1fr;gap:12px;flex-shrink:0">' +
+      '<div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:12px;padding:10px 12px"><p style="font-size:10px;font-weight:700;color:#3b82f6;text-transform:uppercase;letter-spacing:.05em">'+totais.meta.label+'</p><p style="font-size:20px;font-weight:800;color:#1e40af">'+brl(totais.meta.value)+'</p><p style="font-size:10px;color:#60a5fa">'+periodo.mes+'</p></div>' +
+      '<div style="background:#fff;border:1px solid #e2e8f0;border-radius:12px;padding:10px 12px">' +
+        '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px"><p style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.05em">'+totais.vendido.label+'</p><span style="font-size:10px;font-weight:700;color:#94a3b8">'+pctVendido+'% da meta \u00b7 dia '+periodo.diaAtual+'/'+periodo.totalDias+' ('+pctMes+'% do m\u00eas)</span></div>' +
+        '<p style="font-size:20px;font-weight:800;color:#1e293b;margin-bottom:6px">'+brl(totais.vendido.value)+'</p>' +
+        '<div style="position:relative;height:8px;background:#f1f5f9;border-radius:9999px;overflow:hidden"><div style="position:absolute;top:0;height:100%;background:#cbd5e1;border-radius:9999px;width:'+pctMes+'%"></div><div style="position:absolute;top:0;height:100%;background:#3b82f6;border-radius:9999px;width:'+Math.min(pctVendido,100)+'%"></div></div>' +
+        '<div style="display:flex;justify-content:space-between;margin-top:4px"><span style="font-size:10px;color:#94a3b8">Ritmo ideal: '+brl(Math.round(ritmoAtual * periodo.totalDias * (pctMes/pctVendido)))+'</span><span style="font-size:10px;color:#2563eb;font-weight:600">Projeção: '+brl(projecao)+'</span></div>' +
+      '</div>' +
+      '<div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:10px 12px"><p style="font-size:10px;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.05em">'+totais.estoque.label+'</p><p style="font-size:20px;font-weight:800;color:#1e293b">'+brl(totais.estoque.value)+'</p><p style="font-size:10px;color:#94a3b8">valor de venda</p></div>' +
+      '<div style="background:#faf5ff;border:1px solid #e9d5ff;border-radius:12px;padding:10px 12px"><p style="font-size:10px;font-weight:700;color:#a855f7;text-transform:uppercase;letter-spacing:.05em">'+totais.aEntregar.label+'</p><p style="font-size:20px;font-weight:800;color:#6b21a8">'+brl(totais.aEntregar.value)+'</p><p style="font-size:10px;color:#c084fc">em tr\u00e2nsito</p></div>' +
+    '</div>' +
+    '<div style="flex:1;display:flex;flex-direction:column;min-height:0">' +
+      '<div style="border-radius:12px;overflow:hidden;border:1px solid #e2e8f0;box-shadow:0 1px 2px rgba(0,0,0,.05)">' +
+        '<table style="font-size:12px"><thead><tr style="background:#1d4ed8;color:#fff;font-weight:600">' +
+          '<th style="padding:8px 16px;text-align:left">Categoria</th>' +
+          '<th style="padding:8px 16px;text-align:right;border-left:1px solid #2563eb">Meta</th>' +
+          '<th style="padding:8px 16px;text-align:right;border-left:1px solid #2563eb">Vendido</th>' +
+          '<th style="padding:8px 16px;text-align:right;border-left:1px solid #2563eb">% meta</th>' +
+          '<th style="padding:8px 16px;text-align:right;border-left:1px solid #2563eb">Falta</th>' +
+          '<th style="padding:8px 16px;text-align:right;border-left:1px solid #2563eb">Estoque disp.</th>' +
+          '<th style="padding:8px 16px;text-align:right;border-left:1px solid #2563eb">A entregar</th>' +
+          '<th style="padding:8px 16px;text-align:right;border-left:1px solid #3b82f6;background:#1e40af">Total disp.</th>' +
+          '<th style="padding:8px 16px;text-align:center;border-left:1px solid #3b82f6;background:#1e40af">Status</th>' +
+        '</tr></thead><tbody>' + catRows +
+          '<tr style="background:#1d4ed8;color:#fff;font-weight:700;border-top:2px solid #1e40af">' +
+            '<td style="padding:8px 16px">Total</td>' +
+            '<td style="padding:8px 16px;text-align:right;border-left:1px solid #2563eb">'+brl(totais.meta.value)+'</td>' +
+            '<td style="padding:8px 16px;text-align:right;border-left:1px solid #2563eb">'+brl(totais.vendido.value)+'</td>' +
+            '<td style="padding:8px 16px;text-align:right;border-left:1px solid #2563eb">'+pctVendido+'%</td>' +
+            '<td style="padding:8px 16px;text-align:right;border-left:1px solid #2563eb">'+brl(falta)+'</td>' +
+            '<td style="padding:8px 16px;text-align:right;border-left:1px solid #2563eb">'+brl(totais.estoque.value)+'</td>' +
+            '<td style="padding:8px 16px;text-align:right;border-left:1px solid #2563eb">'+brl(totais.aEntregar.value)+'</td>' +
+            '<td style="padding:8px 16px;text-align:right;border-left:1px solid #3b82f6;background:#1e40af">'+brl(disponivel)+'</td>' +
+            '<td style="padding:8px 16px;text-align:center;border-left:1px solid #3b82f6;background:#1e40af"><span style="display:inline-block;padding:2px 8px;border-radius:9999px;font-size:10px;font-weight:700;background:'+statusGeral.bg+';color:'+statusGeral.text+'">'+statusGeral.label+'</span></td>' +
+          '</tr>' +
+        '</tbody></table>' +
+      '</div>' +
+      '<p style="font-size:10px;color:#94a3b8;margin-top:6px;font-style:italic">* Estoque dispon\u00edvel = valor de venda dos SKUs em estoque. A entregar = pedidos de compra confirmados ainda n\u00e3o recebidos.</p>' +
+    '</div>' +
+  '</div>';
+}
+
+/* SLIDE 10 - Timeline */
+function slideTimeline() {
+  var steps = [
+    { phase: 'Setup \u00b7 Primeira quinzena', title: 'Saúde dos dados', color: '#475569', iconName: 'database', items: ['Análise da base de cadastro de produtos','Análise da base de vendas','Análise da base de estoque','Relatório com ajustes necessários','Dever de casa: correções pelo cliente no ERP'] },
+    { phase: 'Setup \u00b7 Segunda quinzena', title: 'Diagnóstico & Parâmetros', color: '#475569', iconName: 'search', items: ['Diagnóstico completo do estoque','"Aula" sobre conceitos básicos (curva ABC, cobertura, lead time)','Validação de parâmetros: metas de vendas, cobertura, orçamento de compra','Primeira sugestão de giro de estoque','Primeira sugestão de compra'] },
+    { phase: 'Recorrente \u00b7 Mensal', title: 'PCP as a Service', color: '#1d4ed8', iconName: 'trendingUp', items: ['Curva ABC atualizada por categoria e referência','Sugestões de giro de estoque','Sugestões de compra por SKU','Indicadores e diagnóstico de saúde do estoque','Duas reuniões mensais de análise e decisão','Auditoria contínua da qualidade dos dados'] },
+  ];
+  var cols = steps.map(function(step) {
+    var lis = step.items.map(function(item) {
+      return '<li style="display:flex;align-items:flex-start;gap:8px;font-size:12.8px;color:#475569"><span style="color:#22c55e;flex-shrink:0;margin-top:2px;display:flex">'+icon('checkCircle',14)+'</span><span>'+item+'</span></li>';
+    }).join('');
+    return '<div style="background:#fff;border-radius:16px;box-shadow:0 1px 2px rgba(0,0,0,.05);border:1px solid #e2e8f0;overflow:hidden;display:flex;flex-direction:column">' +
+      '<div style="background:'+step.color+';padding:12px 16px;display:flex;align-items:center;gap:12px">' +
+        '<span style="color:rgba(255,255,255,.8);display:flex">'+icon(step.iconName,20)+'</span>' +
+        '<div><p style="color:rgba(255,255,255,.7);font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.05em">'+step.phase+'</p><p style="color:#fff;font-weight:700;font-size:16px;line-height:1.25">'+step.title+'</p></div>' +
+      '</div>' +
+      '<ul style="padding:8px 16px;list-style:none;display:flex;flex-direction:column;gap:4px;flex:1">'+lis+'</ul>' +
+    '</div>';
+  }).join('');
+  return '<div class="slide-std">' +
+    '<div class="slide-header" style="margin-bottom:16px"><h2>Como funciona na prática</h2><p>Três etapas para colocar o seu estoque sob controle</p></div>' +
+    '<div style="flex:1;display:flex;align-items:center"><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px;width:100%">'+cols+'</div></div>' +
+  '</div>';
+}
+
+/* SLIDE 11 - O que não fazemos */
+function slideNaoFazemos() {
+  var items = [
+    { icon: 'package', title: 'Contagem de estoque', desc: 'Não realizamos inventário físico ou contagem de peças.' },
+    { icon: 'store', title: 'Compra e negociação', desc: 'Não realizamos compra de produtos nem negociamos com fornecedores. Sugerimos, mas quem executa é você.' },
+    { icon: 'target', title: 'Tomada de decisão final', desc: 'Nós sugerimos com base em dados, mas o "bater o martelo" da compra é sempre do dono.' },
+    { icon: 'trendingUp', title: 'Direção estratégica', desc: 'Não definimos coleção, posicionamento de marca ou estilo, apenas damos suporte numérico à estratégia existente.' },
+    { icon: 'database', title: 'Operação manual de ERP', desc: 'Não lançamos notas fiscais ou cadastramos produtos manualmente.' },
+  ];
+  var html = items.map(function(item) {
+    return '<div style="display:flex;flex-direction:column;gap:8px;padding:16px;background:rgba(254,242,242,.5);border-radius:12px;border:1px solid #fee2e2;box-shadow:0 1px 2px rgba(0,0,0,.05)">' +
+      '<div style="display:flex;align-items:center;gap:8px">' +
+        '<div style="padding:6px;background:#fff;border-radius:8px;box-shadow:0 1px 2px rgba(0,0,0,.05);color:#dc2626;display:flex">'+icon('xCircle',18)+'</div>' +
+        '<h3 style="font-size:14px;font-weight:700;color:#1e293b">'+item.title+'</h3>' +
+      '</div>' +
+      '<p style="font-size:12px;color:#475569">'+item.desc+'</p>' +
+    '</div>';
+  }).join('');
+  return '<div class="slide-std">' +
+    '<div class="slide-header" style="margin-bottom:16px"><h2>O que não fazemos</h2><p>Para garantir o foco estratégico, algumas atividades operacionais não estão no escopo:</p></div>' +
+    '<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;flex:1;align-content:center">'+html+'</div>' +
+  '</div>';
+}
+
+/* SLIDE 12 - Premissas */
+function slidePremissas() {
+  var items = [
+    { icon: 'settings', title: 'ERP compatível', desc: 'Utilizar ERP Tiny ou Bling com acesso aos dados de vendas e estoque.' },
+    { icon: 'clock', title: 'Agenda quinzenal', desc: 'Dispor de 1h a cada 15 dias para o ritual de análise e tomada de decisão.' },
+    { icon: 'database', title: 'Gestão de dados', desc: 'Dispor de tempo e disponibilidade interna para ajustar dados no ERP caso seja necessário.' },
+  ];
+  var html = items.map(function(item) {
+    return '<div style="display:flex;align-items:center;gap:16px;padding:16px;background:#f8fafc;border-radius:12px;border-left:4px solid #2563eb;box-shadow:0 1px 2px rgba(0,0,0,.05)">' +
+      '<div style="background:#fff;padding:12px;border-radius:9999px;box-shadow:0 1px 2px rgba(0,0,0,.05);color:#1d4ed8;flex-shrink:0;display:flex">'+icon(item.icon,22)+'</div>' +
+      '<div>' +
+        '<h3 style="font-size:14px;font-weight:700;color:#1e293b">'+item.title+'</h3>' +
+        '<p style="font-size:12px;color:#475569">'+item.desc+'</p>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+  return '<div class="slide-std">' +
+    '<div class="slide-header" style="margin-bottom:16px"><h2>Premissas para o sucesso</h2><p>O que precisamos para o projeto rodar</p></div>' +
+    '<div style="display:flex;flex-direction:column;justify-content:center;flex:1;gap:12px">'+html+'</div>' +
+  '</div>';
+}
+
+/* SLIDE 13 - Calculadora */
+function slideCalculadora() {
+  var encalheAtual = calcEst * calcBench.pctEncalhe;
+  var rupturaAtual = calcFat * calcBench.pctRuptura;
+  var compraErradaAtual = calcCompra * 12 * calcBench.pctCompraErrada;
+  var perdaTotal = encalheAtual + rupturaAtual + compraErradaAtual;
+  var econEncalhe = encalheAtual * calcMelh.reducaoEncalhe;
+  var econRuptura = rupturaAtual * calcMelh.reducaoRuptura;
+  var econCompra = compraErradaAtual * calcMelh.reducaoCompraErrada;
+  var ganhoTotal = econEncalhe + econRuptura + econCompra;
+  ganhoCalculadora = ganhoTotal;
+
+  function inputBox(label, id, value) {
+    return '<div style="background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;padding:clamp(8px,1.4vh,18px) clamp(10px,1vw,20px)">' +
+      '<p style="font-size:clamp(11px,1.5vh,15px);font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.05em;margin-bottom:2px">'+label+'</p>' +
+      '<span style="font-size:clamp(18px,2.8vh,30px);font-weight:800;color:#1e293b;display:inline-flex;align-items:center;gap:2px">' +
+        '<span style="opacity:.6;font-size:inherit">R$ </span>' +
+        '<input type="text" id="'+id+'" value="'+value.toLocaleString('pt-BR')+'" style="background:transparent;outline:none;border:none;border-bottom:1px dashed #1e293b;font-size:inherit;font-weight:inherit;color:inherit;width:'+Math.max(3,String(value.toLocaleString('pt-BR')).length+1)+'ch;min-width:3ch">' +
+      '</span>' +
+    '</div>';
+  }
+
+  function diagRow(label, desc, value, color, bgColor, borderColor, iconName, pctKey, benchObj, defaultObj) {
+    var pctVal = Math.round(benchObj[pctKey] * 100);
+    var refVal = Math.round(defaultObj[pctKey] * 100);
+    return '<div style="background:'+bgColor+';border:1px solid '+borderColor+';border-radius:8px;display:flex;align-items:center;justify-content:space-between;padding:clamp(8px,1.3vh,16px) clamp(10px,1vw,18px)">' +
+      '<div style="display:flex;align-items:center;gap:clamp(6px,0.8vw,14px)">' +
+        '<span style="color:'+color+';display:flex;width:clamp(16px,2.2vh,24px);height:clamp(16px,2.2vh,24px)">'+icons[iconName]+'</span>' +
+        '<div>' +
+          '<p style="font-size:clamp(13px,1.8vh,18px);font-weight:700;color:#1e293b">'+label+'</p>' +
+          '<p style="font-size:clamp(11px,1.5vh,15px);color:#64748b">' +
+            '<span style="display:inline-flex;align-items:center;gap:2px;font-weight:600;color:#475569;font-size:clamp(11px,1.5vh,15px)">' +
+              '<input type="text" class="calc-pct" data-key="bench.'+pctKey+'" value="'+pctVal+'" style="background:transparent;outline:none;border:none;border-bottom:1px dashed #475569;font-size:inherit;font-weight:inherit;color:inherit;width:'+Math.max(2,String(pctVal).length+1)+'ch;min-width:2ch;text-align:center">' +
+              '<span style="opacity:.6;font-size:inherit">%</span>' +
+              '<span style="opacity:.5;margin-left:4px;font-size:clamp(8px,1vh,11px)">(ref: '+refVal+'%)</span>' +
+            '</span> '+desc +
+          '</p>' +
+        '</div>' +
+      '</div>' +
+      '<p style="font-size:clamp(16px,2.4vh,26px);font-weight:800;color:'+color+';white-space:nowrap;margin-left:8px">'+brl(value)+'</p>' +
+    '</div>';
+  }
+
+  function gainRow(label, desc, value, melhKey) {
+    var pctVal = Math.round(calcMelh[melhKey] * 100);
+    var refVal = Math.round(defaultMelh[melhKey] * 100);
+    return '<div style="background:#fff;border:1px solid #bbf7d0;border-radius:8px;display:flex;align-items:center;justify-content:space-between;padding:clamp(8px,1.3vh,16px) clamp(10px,1vw,18px)">' +
+      '<div>' +
+        '<p style="font-size:clamp(13px,1.8vh,18px);font-weight:700;color:#1e293b">'+label+'</p>' +
+        '<p style="font-size:clamp(11px,1.5vh,15px);color:#64748b">' +
+          'Melhoria de ' +
+          '<span style="display:inline-flex;align-items:center;gap:2px;font-weight:600;color:#15803d;font-size:clamp(11px,1.5vh,15px)">' +
+            '<input type="text" class="calc-pct" data-key="melh.'+melhKey+'" value="'+pctVal+'" style="background:transparent;outline:none;border:none;border-bottom:1px dashed #15803d;font-size:inherit;font-weight:inherit;color:inherit;width:'+Math.max(2,String(pctVal).length+1)+'ch;min-width:2ch;text-align:center">' +
+            '<span style="opacity:.6;font-size:inherit">%</span>' +
+            '<span style="opacity:.5;margin-left:4px;font-size:clamp(8px,1vh,11px)">(ref: '+refVal+'%)</span>' +
+          '</span> \u2014 '+desc +
+        '</p>' +
+      '</div>' +
+      '<p style="font-size:clamp(16px,2.4vh,26px);font-weight:800;color:#15803d;white-space:nowrap;margin-left:8px">+ '+brl(value)+'</p>' +
+    '</div>';
+  }
+
+  return '<div style="display:flex;flex-direction:column;height:100%;padding:1.5% 3% 1%;animation:fadeIn .4s ease-out;width:100%;gap:clamp(12px,2.2vh,24px)">' +
+    '<div><h2 style="font-size:clamp(22px,3.5vh,36px);font-weight:700;color:#0f172a">Calculadora de Impacto</h2><p style="font-size:clamp(14px,2vh,20px);color:#64748b;margin-top:clamp(2px,0.5vh,6px)">Descubra quanto dinheiro você está perdendo — e quanto pode recuperar com a StoIQ</p></div>' +
+    '<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(8px,1.2vw,20px);flex-shrink:0">' +
+      inputBox('Faturamento mensal', 'calcFat', calcFat) +
+      inputBox('Estoque atual', 'calcEst', calcEst) +
+      inputBox('Compra mensal', 'calcCompra', calcCompra) +
+    '</div>' +
+    '<div style="display:flex;flex:1;min-height:0;gap:clamp(8px,1.2vw,20px)">' +
+      '<div style="flex:1;background:#fef2f2;border:1px solid #fecaca;border-radius:12px;display:flex;flex-direction:column;padding:clamp(10px,1.8vh,22px)">' +
+        '<p style="font-size:clamp(12px,1.6vh,16px);font-weight:700;color:#ef4444;text-transform:uppercase;letter-spacing:.05em">Diagnóstico: quanto você perde hoje</p>' +
+        '<div style="display:flex;flex-direction:column;flex:1;gap:clamp(6px,1.2vh,14px);margin-top:clamp(6px,1.2vh,14px)">' +
+          diagRow('Estoque encalhado','do estoque parado sem venda',encalheAtual,'#b45309','#fffbeb','#fde68a','package','pctEncalhe',calcBench,defaultBench) +
+          diagRow('Vendas perdidas por ruptura','do faturamento perdido por falta',rupturaAtual,'#c2410c','#fff7ed','#fed7aa','alertTriangle','pctRuptura',calcBench,defaultBench) +
+          diagRow('Compra errada \u2192 encalhe','da compra anual vira estoque parado',compraErradaAtual,'#b91c1c','#fef2f2','#fecaca','shoppingCart','pctCompraErrada',calcBench,defaultBench) +
+          '<div style="background:#fee2e2;border:1px solid #fca5a5;border-radius:8px;display:flex;align-items:center;justify-content:space-between;padding:clamp(10px,1.5vh,18px) clamp(10px,1vw,18px);margin-top:auto">' +
+            '<p style="font-size:clamp(14px,2vh,20px);font-weight:700;color:#991b1b">Perda total / ano</p>' +
+            '<p style="font-size:clamp(20px,3vh,32px);font-weight:800;color:#b91c1c">'+brl(perdaTotal)+'</p>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div style="flex:1;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px;display:flex;flex-direction:column;padding:clamp(10px,1.8vh,22px)">' +
+        '<p style="font-size:clamp(12px,1.6vh,16px);font-weight:700;color:#16a34a;text-transform:uppercase;letter-spacing:.05em">Com a StoIQ: quanto você recupera</p>' +
+        '<div style="display:flex;flex-direction:column;flex:1;gap:clamp(6px,1.2vh,14px);margin-top:clamp(6px,1.2vh,14px)">' +
+          gainRow('Liberação de caixa','redução de encalhe',econEncalhe,'reducaoEncalhe') +
+          gainRow('Faturamento recuperado','redução de ruptura',econRuptura,'reducaoRuptura') +
+          gainRow('Economia em compras','redução de compra errada',econCompra,'reducaoCompraErrada') +
+          '<div style="background:#16a34a;border-radius:8px;display:flex;align-items:center;justify-content:space-between;padding:clamp(10px,1.5vh,18px) clamp(10px,1vw,18px);margin-top:auto">' +
+            '<p style="font-size:clamp(14px,2vh,20px);font-weight:700;color:#fff">Ganho total / ano</p>' +
+            '<p style="font-size:clamp(20px,3vh,32px);font-weight:800;color:#fff">+ '+brl(ganhoTotal)+'</p>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+    '</div>' +
+  '</div>';
+}
+
+function attachCalcEvents() {
+  var fatInput = document.getElementById('calcFat');
+  var estInput = document.getElementById('calcEst');
+  var compraInput = document.getElementById('calcCompra');
+  if (!fatInput) return;
+
+  function parseNum(s) { return Number(String(s).replace(/\D/g, '')) || 0; }
+
+  function onMainChange() {
+    calcFat = parseNum(fatInput.value);
+    calcEst = parseNum(estInput.value);
+    calcCompra = parseNum(compraInput.value);
+    render();
+  }
+  [fatInput, estInput, compraInput].forEach(function(inp) {
+    inp.addEventListener('focus', function() { this.value = String(this.value).replace(/\D/g, ''); this.select(); });
+    inp.addEventListener('blur', function() { onMainChange(); });
+    inp.addEventListener('keydown', function(e) { if (e.key === 'Enter') { this.blur(); } });
+  });
+
+  document.querySelectorAll('.calc-pct').forEach(function(inp) {
+    inp.addEventListener('focus', function() { this.select(); });
+    inp.addEventListener('blur', function() {
+      var val = Math.min(100, Math.max(0, parseNum(this.value))) / 100;
+      var key = this.getAttribute('data-key');
+      var parts = key.split('.');
+      if (parts[0] === 'bench') calcBench[parts[1]] = val;
+      else calcMelh[parts[1]] = val;
+      render();
+    });
+    inp.addEventListener('keydown', function(e) { if (e.key === 'Enter') { this.blur(); } });
+  });
+}
+
+/* SLIDE 14 - Pricing */
+function slidePricing() {
+  var roiHtml = '';
+  if (ganhoCalculadora > 0) {
+    roiHtml = '<div style="max-width:960px;margin:16px auto 0;width:100%">' +
+      '<div style="background:linear-gradient(to right,#f0fdf4,#eff6ff);border:1px solid #bbf7d0;border-radius:12px;padding:16px 24px;display:flex;align-items:center;justify-content:space-between">' +
+        '<div style="display:flex;align-items:center;gap:32px">' +
+          '<div><p style="font-size:12px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.05em">Investimento anual StoIQ</p><p style="font-size:20px;font-weight:800;color:#1e293b">R$ 24.000</p></div>' +
+          '<div style="width:1px;height:40px;background:#e2e8f0"></div>' +
+          '<div><p style="font-size:12px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:.05em">Economia estimada / ano</p><p style="font-size:20px;font-weight:800;color:#15803d">+ '+brl(ganhoCalculadora)+'</p></div>' +
+        '</div>' +
+        '<div style="background:#16a34a;border-radius:12px;padding:12px 20px;text-align:center"><p style="font-size:12px;font-weight:700;color:#bbf7d0;text-transform:uppercase;letter-spacing:.05em">ROI</p><p style="font-size:30px;font-weight:800;color:#fff">'+Math.round(ganhoCalculadora/24000)+'x</p></div>' +
+      '</div>' +
+    '</div>';
+  }
+
+  return '<div class="slide-std">' +
+    '<div class="slide-header" style="margin-bottom:16px"><h2>Proposta de trabalho</h2><p>Modelo exclusivo para parceiros beta</p></div>' +
+    '<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:32px;align-items:stretch;flex:1;min-height:0;max-width:960px;margin:0 auto;width:100%">' +
+      '<div style="width:100%;background:#fff;border-radius:16px;box-shadow:0 10px 15px -3px rgba(0,0,0,.1);overflow:hidden;border:1px solid #e2e8f0;position:relative;display:flex;flex-direction:column">' +
+        '<div style="background:#22c55e;color:#fff;text-align:center;padding:4px 32px;font-weight:700;font-size:12px;letter-spacing:.05em;text-transform:uppercase;position:absolute;top:16px;right:-40px;transform:rotate(45deg);box-shadow:0 1px 2px rgba(0,0,0,.1);width:180px">CORTESIA</div>' +
+        '<div style="padding:24px;text-align:center;border-bottom:1px solid #f1f5f9">' +
+          '<h3 style="font-size:20px;font-weight:700;color:#1e293b;margin-bottom:4px">Setup: Diagnóstico e Higiene</h3>' +
+          '<p style="font-size:14px;color:#64748b;font-weight:500;margin-bottom:16px">Primeiro mês (2 quinzenas)</p>' +
+          '<div style="display:flex;flex-direction:column;align-items:center"><span style="color:#94a3b8;font-weight:500;font-size:18px;text-decoration:line-through">R$ 3.500,00</span><span style="font-size:36px;font-weight:800;color:#16a34a">GRATUITO</span></div>' +
+        '</div>' +
+        '<div style="padding:24px;background:#fff;flex:1"><ul style="list-style:none;display:flex;flex-direction:column;gap:12px">' +
+          ['Diagnóstico inicial completo','Auditoria de saúde dos dados','Orientações de correção dos dados','1 Reunião estratégica (se premissas ok)'].map(function(f) {
+            return '<li style="display:flex;align-items:flex-start;gap:12px;color:#334155;font-size:14px"><span style="color:#22c55e;flex-shrink:0;margin-top:2px;display:flex">'+icon('checkCircle',18)+'</span><span style="font-weight:500">'+f+'</span></li>';
+          }).join('') +
+        '</ul></div>' +
+      '</div>' +
+      '<div style="width:100%;background:#fff;border-radius:16px;box-shadow:0 10px 15px -3px rgba(0,0,0,.1);overflow:hidden;border:1px solid #e2e8f0;position:relative;display:flex;flex-direction:column">' +
+        '<div style="padding:24px;text-align:center;border-bottom:1px solid #f1f5f9">' +
+          '<h3 style="font-size:20px;font-weight:700;color:#1e293b;margin-bottom:4px">PCP as a Service</h3>' +
+          '<p style="font-size:14px;color:#64748b;font-weight:500;margin-bottom:16px">Recorrente (mensal)</p>' +
+          '<div style="display:flex;align-items:baseline;justify-content:center;gap:4px"><span style="font-size:36px;font-weight:800;color:#1d4ed8">R$ 2.000,00</span><span style="color:#64748b;font-weight:500">/mês</span></div>' +
+        '</div>' +
+        '<div style="padding:24px;background:#fff;flex:1"><ul style="list-style:none;display:flex;flex-direction:column;gap:12px">' +
+          ['Ritual quinzenal (2 reuniões/mês)','Análise de ruptura e encalhe','Apoio na definição de metas de vendas','Sugestão de compras por SKU','Suporte contínuo via WhatsApp','Relatórios em PDF/Excel'].map(function(f) {
+            return '<li style="display:flex;align-items:flex-start;gap:12px;color:#334155;font-size:14px"><span style="color:#22c55e;flex-shrink:0;margin-top:2px;display:flex">'+icon('checkCircle',18)+'</span><span style="font-weight:500">'+f+'</span></li>';
+          }).join('') +
+        '</ul></div>' +
+      '</div>' +
+    '</div>' +
+    roiHtml +
+  '</div>';
+}
+
+/* SLIDE 15 - Cover Final */
+function slideCoverFinal() {
+  return '<div class="cover-slide">' +
+    '<div class="cover-icon">' + icons.barChart2 + '</div>' +
+    '<div style="max-width:800px"><div class="cover-main">Próximos passos</div></div>' +
+    '<button class="cover-cta">Vamos começar? ' + icons.arrowRight + '</button>' +
+    '<div class="cover-footer"><p>1. Aceite da proposta | 2. Acesso ao ERP | 3. Kick-off</p></div>' +
+  '</div>';
+}
+
+// Initial render
+render();
+</script>
+</body>
+</html>
