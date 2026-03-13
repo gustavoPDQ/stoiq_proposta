@@ -29,17 +29,17 @@ const Presentation = () => {
           role: 'Especialista em Dados',
           bio: 'Engenheiro, com mais de 10 anos de experiência em análise de dados e desenvolvimento de produtos.',
           color: 'bg-blue-700',
-          photo: '/Gemini_Generated_Image_lc2iexlc2iexlc2i.png'
+          photo: '/StoIQ_Gustavo.png'
         },
         {
-          photo: '/Foto_Breno.PNG',
+          photo: '/StoIQ_Breno.png',
           name: 'Breno',
           role: 'Especialista em Varejo',
           bio: 'Dono de rede de 8 lojas e e-commerce em Minas Gerais.',
           color: 'bg-indigo-700'
         },
         {
-          photo: '/foto_jonas.jpg',
+          photo: '/StoIQ_Jonas.png',
           name: 'Jonas Ayres',
           role: 'Negócios',
           bio: 'Mais de 10 anos de experiência em consultoria de gestão e finanças para pequenos e médios negócios brasileiros.',
@@ -142,6 +142,102 @@ const Presentation = () => {
           color: 'border-purple-500 text-purple-600'
         },
       ]
+    },
+    {
+      id: 'data_health',
+      type: 'data_health',
+      title: 'Saúde dos Dados',
+      subtitle: 'Antes de qualquer análise, auditamos a qualidade do seu cadastro. Dado ruim gera decisão ruim.',
+      checks: [
+        { label: 'SKUs vazios',                    desc: 'Produtos sem nome ou descrição que tornam impossível identificar o que está sendo vendido ou comprado.' },
+        { label: 'SKUs duplicados',                desc: 'O mesmo produto cadastrado mais de uma vez divide o histórico de vendas e distorce qualquer análise.' },
+        { label: 'Estoque negativo',               desc: 'Saldo negativo indica movimentação sem registro ou divergência entre físico e sistema.' },
+        { label: 'Preço de custo vazio',           desc: 'Sem custo não é possível calcular margem, cobertura financeira nem sugerir compra com orçamento.' },
+        { label: 'Preço de venda vazio',           desc: 'Impede o cálculo de faturamento potencial e torna inviável qualquer projeção de meta.' },
+        { label: 'Categoria vazia',                desc: 'Sem categoria não há curva ABC por departamento nem análise segmentada por linha de produto.' },
+        { label: 'Fornecedor vazio',               desc: 'Sem fornecedor não é possível agrupar sugestões de compra por pedido nem respeitar lead times.' },
+        { label: 'Sem venda nos últimos 180 dias', desc: 'Produto parado há mais de 6 meses é candidato a encalhe e precisa de decisão imediata.' },
+      ]
+    },
+    {
+      id: 'stock_status',
+      type: 'stock_status',
+      title: 'Raio-X do Estoque na prática',
+      subtitle: 'Como classificamos cada SKU e o que isso significa para o seu negócio',
+      statuses: [
+        {
+          key: 'saudavel',
+          label: 'Saudável',
+          dotColor: 'bg-green-500',
+          textColor: 'text-green-700',
+          bgColor: 'bg-green-50',
+          borderColor: 'border-green-200',
+          definition: 'Dentro da cobertura ideal e sem perder vendas por ruptura.',
+          example: 'Produto com cobertura de 45 dias e lead time de 30 dias — estoque certo na quantidade certa.',
+        },
+        {
+          key: 'encalhado',
+          label: 'Encalhado',
+          dotColor: 'bg-amber-400',
+          textColor: 'text-amber-700',
+          bgColor: 'bg-amber-50',
+          borderColor: 'border-amber-200',
+          definition: 'Acima da cobertura ideal definida — capital de giro preso em mercadoria parada.',
+          example: 'Produto comprado para 90 dias de estoque, mas que vende em ritmo de 30 dias — sobra 60 dias encalhados.',
+        },
+        {
+          key: 'ruptura',
+          label: 'Ruptura',
+          dotColor: 'bg-orange-500',
+          textColor: 'text-orange-700',
+          bgColor: 'bg-orange-50',
+          borderColor: 'border-orange-200',
+          definition: 'Tem estoque, mas insuficiente para cobrir o lead time do fornecedor.',
+          example: 'Restam 10 peças, vende 5/dia, lead time 7 dias — vai zerar antes da reposição chegar.',
+        },
+        {
+          key: 'critico',
+          label: 'Crítico',
+          dotColor: 'bg-red-500',
+          textColor: 'text-red-700',
+          bgColor: 'bg-red-50',
+          borderColor: 'border-red-200',
+          definition: 'Sem estoque hoje — perdendo venda agora.',
+          example: 'SKU zerado na loja: o cliente quer comprar, mas não tem produto disponível.',
+        },
+      ],
+      tableData: {
+        rows: [
+          { key: 'saudavel',  label: 'Saudável',  total: 56,  pct: '7%',  a: 29,  pctA: '15%', b: 19,  pctB: '9%',  c: 8,   pctC: '2%'  },
+          { key: 'encalhado', label: 'Encalhado', total: 444, pct: '55%', a: 63,  pctA: '32%', b: 134, pctB: '60%', c: 247, pctC: '64%' },
+          { key: 'ruptura',   label: 'Ruptura',   total: 119, pct: '15%', a: 56,  pctA: '28%', b: 24,  pctB: '11%', c: 39,  pctC: '10%' },
+          { key: 'critico',   label: 'Crítico',   total: 188, pct: '23%', a: 49,  pctA: '25%', b: 45,  pctB: '20%', c: 94,  pctC: '24%' },
+        ],
+        totals: { total: 807, a: 197, b: 222, c: 388 },
+      },
+    },
+    {
+      id: 'giro_encalhados',
+      type: 'giro_encalhados',
+      title: 'Sugestão de Giro de Encalhados',
+      subtitle: 'Quanto capital de giro está parado e quanto você pode recuperar com cada nível de desconto',
+      summary: {
+        rows: [
+          { label: 'Quantidade excedente',  total: '444',            a: '63',           b: '134',          c: '247'          },
+          { label: 'Valor de custo total',  total: 'R$ 57.720',      a: 'R$ 8.190',     b: 'R$ 17.420',    c: 'R$ 32.110'    },
+          { label: 'Valor de venda total',  total: 'R$ 230.880',     a: 'R$ 32.760',    b: 'R$ 69.680',    c: 'R$ 128.440'   },
+        ],
+      },
+      discounts: [
+        { pct: '0%',  total: 'R$ 230.880', a: 'R$ 32.760', b: 'R$ 69.680', c: 'R$ 128.440' },
+        { pct: '10%', total: 'R$ 207.792', a: 'R$ 29.484', b: 'R$ 62.712', c: 'R$ 115.596' },
+        { pct: '20%', total: 'R$ 184.704', a: 'R$ 26.208', b: 'R$ 55.744', c: 'R$ 102.752' },
+        { pct: '30%', total: 'R$ 161.616', a: 'R$ 22.932', b: 'R$ 48.776', c: 'R$  89.908' },
+        { pct: '40%', total: 'R$ 138.528', a: 'R$ 19.656', b: 'R$ 41.808', c: 'R$  77.064' },
+        { pct: '50%', total: 'R$ 115.440', a: 'R$ 16.380', b: 'R$ 34.840', c: 'R$  64.220' },
+        { pct: '60%', total: 'R$  92.352', a: 'R$ 13.104', b: 'R$ 27.872', c: 'R$  51.376' },
+        { pct: '70%', total: 'R$  69.264', a: 'R$  9.828', b: 'R$ 20.904', c: 'R$  38.532' },
+      ],
     },
     {
       id: 'timeline',
@@ -287,7 +383,7 @@ const Presentation = () => {
             <div className="grid grid-cols-3 gap-6 flex-1 min-h-0">
               {slide.members.map((m, idx) => (
                 <div key={idx} className="flex flex-col bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-md transition-all min-h-0">
-                  <div className={`flex-1 w-full ${m.color} flex items-center justify-center overflow-hidden min-h-0`}>
+                  <div className={`w-full h-56 ${m.color} flex items-center justify-center overflow-hidden flex-shrink-0`}>
                     {m.photo
                       ? <img src={m.photo} alt={m.name} className="w-full h-full object-cover object-top" />
                       : <span className="text-white font-bold text-4xl opacity-40">{m.initials}</span>
@@ -528,6 +624,177 @@ const Presentation = () => {
             </div>
           </div>
         );
+
+      case 'giro_encalhados':
+        return (
+          <div className="flex flex-col h-full pt-6 pb-12 px-8 md:px-14 animate-fadeIn w-full gap-4">
+            <div>
+              <h2 className="text-3xl font-bold text-slate-900 mb-1">{slide.title}</h2>
+              <p className="text-base text-slate-500">{slide.subtitle}</p>
+            </div>
+
+            {/* Summary KPIs */}
+            <div className="grid grid-cols-3 gap-4 flex-shrink-0">
+              {slide.summary.rows.map((row, idx) => {
+                const configs = [
+                  { bg: 'bg-amber-50', border: 'border-amber-200', label: 'text-amber-600', value: 'text-amber-800', icon: Package },
+                  { bg: 'bg-slate-50', border: 'border-slate-200', label: 'text-slate-500', value: 'text-slate-800', icon: DollarSign },
+                  { bg: 'bg-green-50', border: 'border-green-200', label: 'text-green-600', value: 'text-green-800', icon: TrendingUp },
+                ];
+                const c = configs[idx];
+                return (
+                  <div key={idx} className={`${c.bg} border ${c.border} rounded-xl px-4 py-3 flex items-center gap-3`}>
+                    <div className={`w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0 bg-white shadow-sm ${c.label}`}>
+                      <c.icon size={18} />
+                    </div>
+                    <div className="min-w-0">
+                      <p className={`text-[11px] font-semibold uppercase tracking-wide ${c.label}`}>{row.label}</p>
+                      <p className={`text-lg font-extrabold leading-tight ${c.value}`}>{row.total}</p>
+                      <div className="flex gap-2 mt-0.5">
+                        {[['A', row.a], ['B', row.b], ['C', row.c]].map(([curve, val]) => (
+                          <span key={curve} className="text-[10px] text-slate-500"><span className="font-bold text-slate-600">{curve}</span> {val}</span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Discount table */}
+            <div className="flex-1 flex flex-col min-h-0">
+              <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wide mb-1.5">Potencial de caixa por desconto médio</p>
+              <div className="rounded-xl overflow-hidden border border-slate-200 shadow-sm">
+                <table className="text-xs w-full border-collapse">
+                  <thead>
+                    <tr className="bg-amber-500 text-white font-semibold">
+                      <th className="px-4 py-2 text-left">Desconto</th>
+                      <th className="px-4 py-2 text-right">Total</th>
+                      <th className="px-4 py-2 text-right border-l border-amber-400 bg-amber-600">A</th>
+                      <th className="px-4 py-2 text-right border-l border-amber-400">B</th>
+                      <th className="px-4 py-2 text-right border-l border-amber-400">C</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {slide.discounts.map((row, idx) => (
+                      <tr key={idx} className={`${idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/60'} hover:bg-amber-50/40 transition-colors`}>
+                        <td className={`px-4 py-1.5 font-bold ${idx === 0 ? 'text-slate-400' : 'text-amber-600'}`}>{row.pct}</td>
+                        <td className="px-4 py-1.5 text-right font-semibold text-slate-800">{row.total}</td>
+                        <td className="px-4 py-1.5 text-right text-blue-700 font-medium border-l border-slate-100 bg-blue-50/30">{row.a}</td>
+                        <td className="px-4 py-1.5 text-right text-slate-700 font-medium border-l border-slate-100">{row.b}</td>
+                        <td className="px-4 py-1.5 text-right text-slate-700 font-medium border-l border-slate-100">{row.c}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        );
+
+      case 'data_health':
+        return (
+          <div className="flex flex-col h-full pt-6 pb-12 px-8 md:px-14 animate-fadeIn w-full">
+            <div className="mb-4">
+              <h2 className="text-3xl font-bold text-slate-900 mb-1">{slide.title}</h2>
+              <p className="text-base text-slate-500">{slide.subtitle}</p>
+            </div>
+            <div className="grid grid-cols-2 gap-3 flex-1 content-center">
+              {slide.checks.map((check, idx) => (
+                <div key={idx} className="flex items-start gap-3 bg-white border border-slate-200 rounded-xl p-3.5 hover:border-amber-300 hover:bg-amber-50/30 transition-colors">
+                  <div className="flex-shrink-0 w-6 h-6 rounded-full bg-amber-100 flex items-center justify-center mt-0.5">
+                    <AlertTriangle size={13} className="text-amber-600" />
+                  </div>
+                  <div>
+                    <p className="text-sm font-bold text-slate-800 leading-tight">{check.label}</p>
+                    <p className="text-xs text-slate-500 leading-snug mt-0.5">{check.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        );
+
+      case 'stock_status': {
+        const dotClass = { saudavel: 'bg-green-500', encalhado: 'bg-amber-400', ruptura: 'bg-orange-500', critico: 'bg-red-500' };
+        return (
+          <div className="flex flex-col h-full pt-8 pb-14 px-8 md:px-16 animate-fadeIn w-full">
+            <div className="mb-4">
+              <h2 className="text-3xl font-bold text-slate-900 mb-1">{slide.title}</h2>
+              <p className="text-base text-slate-500">{slide.subtitle}</p>
+            </div>
+            <div className="flex gap-6 flex-1 min-h-0">
+              {/* Table */}
+              <div className="flex flex-col flex-shrink-0 justify-center">
+                <table className="text-xs border-collapse rounded-xl overflow-hidden shadow-sm border border-slate-200">
+                  <thead>
+                    <tr className="bg-slate-100 text-slate-600 font-semibold">
+                      <th className="px-3 py-2 text-left">Status</th>
+                      <th className="px-3 py-2 text-center border-l border-slate-200" colSpan={2}>Total</th>
+                      <th className="px-3 py-2 text-center border-l border-slate-200 bg-blue-50 text-blue-700" colSpan={2}>A</th>
+                      <th className="px-3 py-2 text-center border-l border-slate-200" colSpan={2}>B</th>
+                      <th className="px-3 py-2 text-center border-l border-slate-200" colSpan={2}>C</th>
+                    </tr>
+                    <tr className="bg-slate-50 text-slate-500 font-medium text-[11px]">
+                      <th className="px-3 py-1 text-left"></th>
+                      <th className="px-3 py-1 text-right border-l border-slate-200">Qtd</th>
+                      <th className="px-3 py-1 text-right">%</th>
+                      <th className="px-3 py-1 text-right border-l border-slate-200 bg-blue-50">Qtd</th>
+                      <th className="px-3 py-1 text-right bg-blue-50">%</th>
+                      <th className="px-3 py-1 text-right border-l border-slate-200">Qtd</th>
+                      <th className="px-3 py-1 text-right">%</th>
+                      <th className="px-3 py-1 text-right border-l border-slate-200">Qtd</th>
+                      <th className="px-3 py-1 text-right">%</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {slide.tableData.rows.map((row, idx) => (
+                      <tr key={row.key} className={idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/60'}>
+                        <td className="px-3 py-2 font-semibold text-slate-700 flex items-center gap-1.5 whitespace-nowrap">
+                          <span className={`w-2.5 h-2.5 rounded-full flex-shrink-0 ${dotClass[row.key]}`}></span>
+                          {row.label}
+                        </td>
+                        <td className="px-3 py-2 text-right text-slate-700 border-l border-slate-100 font-medium">{row.total}</td>
+                        <td className="px-3 py-2 text-right text-slate-400">{row.pct}</td>
+                        <td className="px-3 py-2 text-right text-blue-700 border-l border-slate-100 font-medium bg-blue-50/40">{row.a}</td>
+                        <td className="px-3 py-2 text-right text-blue-400 bg-blue-50/40">{row.pctA}</td>
+                        <td className="px-3 py-2 text-right text-slate-700 border-l border-slate-100 font-medium">{row.b}</td>
+                        <td className="px-3 py-2 text-right text-slate-400">{row.pctB}</td>
+                        <td className="px-3 py-2 text-right text-slate-700 border-l border-slate-100 font-medium">{row.c}</td>
+                        <td className="px-3 py-2 text-right text-slate-400">{row.pctC}</td>
+                      </tr>
+                    ))}
+                    <tr className="bg-slate-100 font-bold text-slate-700 border-t border-slate-200">
+                      <td className="px-3 py-2">Total</td>
+                      <td className="px-3 py-2 text-right border-l border-slate-200">{slide.tableData.totals.total}</td>
+                      <td></td>
+                      <td className="px-3 py-2 text-right text-blue-700 border-l border-slate-200 bg-blue-50/40">{slide.tableData.totals.a}</td>
+                      <td className="bg-blue-50/40"></td>
+                      <td className="px-3 py-2 text-right border-l border-slate-200">{slide.tableData.totals.b}</td>
+                      <td></td>
+                      <td className="px-3 py-2 text-right border-l border-slate-200">{slide.tableData.totals.c}</td>
+                      <td></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              {/* Status cards */}
+              <div className="grid grid-cols-2 gap-3 flex-1 min-h-0 content-center">
+                {slide.statuses.map((s) => (
+                  <div key={s.key} className={`${s.bgColor} border ${s.borderColor} rounded-xl p-3.5 flex flex-col gap-1.5`}>
+                    <div className="flex items-center gap-2">
+                      <span className={`w-3 h-3 rounded-full flex-shrink-0 ${s.dotColor}`}></span>
+                      <span className={`font-bold text-sm ${s.textColor}`}>{s.label}</span>
+                    </div>
+                    <p className="text-xs text-slate-700 font-medium leading-snug">{s.definition}</p>
+                    <p className="text-[11px] text-slate-500 italic leading-snug border-t border-slate-200/60 pt-1.5">Ex: {s.example}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        );
+      }
 
       default:
         return <div>Slide desconhecido</div>;
