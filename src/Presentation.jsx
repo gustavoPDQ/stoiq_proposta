@@ -769,7 +769,7 @@ const Presentation = () => {
           : { label: 'Não vai bater', bg: 'bg-red-100', text: 'text-red-700', border: 'border-red-300' };
 
         return (
-          <div className="flex flex-col h-full pt-6 pb-12 px-8 md:px-14 animate-fadeIn w-full gap-3">
+          <div className="flex flex-col h-full pt-6 pb-12 px-8 md:px-14 animate-fadeIn w-full gap-6">
             <div className="flex items-start justify-between">
               <div>
                 <h2 className="text-3xl font-bold text-slate-900 mb-1">{slide.title}</h2>
