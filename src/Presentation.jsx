@@ -41,8 +41,8 @@ const Presentation = () => {
         {
           photo: '/StoIQ_Jonas.png',
           name: 'Jonas Ayres',
-          role: 'Negócios',
-          bio: 'Mais de 10 anos de experiência em consultoria de gestão e finanças para pequenos e médios negócios brasileiros.',
+          role: 'Gestão e Finanças',
+          bio: 'Fundador e diretor da Padoque, especialista em Finanças pela Fundação Dom Cabral (FDC). Com 13 anos de atuação sólida nas áreas de controladoria e finanças.',
           color: 'bg-slate-700'
         }
       ]
