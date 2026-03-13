@@ -110,7 +110,7 @@ const Presentation = () => {
           number: '01',
           icon: Database,
           title: 'Saúde dos dados',
-          desc: 'Auditamos o ERP e identificamos inconsistências em cadastros, custos, grades e movimentações. Orientamos o que precisa ser corrigido — a execução fica com você. Decisão boa começa com dado confiável.',
+          desc: 'Auditamos o ERP, identificamos inconsistências e orientamos o que corrigir — a execução fica com você. Decisão boa começa com dado confiável.',
           color: 'border-slate-400 text-slate-600'
         },
         {
