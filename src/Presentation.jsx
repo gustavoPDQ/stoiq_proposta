@@ -33,9 +33,9 @@ const Presentation = () => {
         },
         {
           photo: '/StoIQ_Breno.png',
-          name: 'Breno',
-          role: 'Especialista em Varejo',
-          bio: 'Dono de rede de 8 lojas e e-commerce em Minas Gerais.',
+          name: 'Breno Penoni',
+          role: 'Experiência na ponta',
+          bio: 'Fundador da Bendizê, marca de moda/varejo com canais de e-commerce e 7 lojas físicas espalhadas por Minas Gerais. Mais de 8 anos de experiência em gestão de marca e estoque.',
           color: 'bg-indigo-700'
         },
         {
