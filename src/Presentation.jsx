@@ -26,8 +26,8 @@ const Presentation = () => {
         {
           initials: 'GD',
           name: 'Gustavo Domingues',
-          role: 'Especialista em Dados',
-          bio: 'Engenheiro, com mais de 10 anos de experiência em análise de dados e desenvolvimento de produtos.',
+          role: 'Dados e Tecnologia',
+          bio: 'Sócio da Padoque, engenheiro de formação e com mais de 5 anos de experiência em análise de dados e desenvolvimento de produtos dentro de consultorias.',
           color: 'bg-blue-700',
           photo: '/StoIQ_Gustavo.png'
         },
